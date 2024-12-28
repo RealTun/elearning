@@ -22,6 +22,9 @@ app.use(cors(corsOptions));
 // Middleware
 app.use(express.json());
 
+// db
+require('./dbs/init.mongodb');
+
 // Routes
 app.use('/api', apiRoutes);
 
