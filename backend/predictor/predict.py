@@ -2,9 +2,9 @@ import joblib
 import pandas as pd
 
 # Tải mô hình và mã hóa
-voting_model = joblib.load("./Model/voting_career_model.pkl")
-target_encoder = joblib.load("./Model/target_encoder.pkl")
-label_encoders = joblib.load("./Model/label_encoders.pkl")
+voting_model = joblib.load("./models/voting_career_model.pkl")
+target_encoder = joblib.load("./models/target_encoder.pkl")
+label_encoders = joblib.load("./models/label_encoders.pkl")
 
 # Thông tin đầu vào
 student_info = {

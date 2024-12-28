@@ -1,6 +1,7 @@
 const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
 const { login, getSummaryMark, getListMarkDetail, getCourseSubject } = require('../controllers/student.controller');
+const { chatCompletion } = require('../controllers/openai.controller');
 const router = express.Router();
 
 // student
@@ -15,5 +16,8 @@ router.post('/company/search', findCompanyByName);
 
 // predict
 router.post('/predict/career', predictCareer);
+
+// openai
+router.post('/openai/chat', chatCompletion);
 
 module.exports = router;

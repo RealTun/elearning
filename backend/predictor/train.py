@@ -55,7 +55,7 @@ print("Độ đo chính xác (Accuracy) của Voting Classifier:", accuracy_voti
 print("\nBáo cáo phân loại (Classification Report):\n", classification_report(y_test, y_pred_voting))
 
 # Lưu mô hình Voting Classifier và các mã hóa
-joblib.dump(voting_model, "./Model/voting_career_model.pkl")
-joblib.dump(target_encoder, "./Model/target_encoder.pkl")
-joblib.dump(label_encoders, "./Model/label_encoders.pkl")
+joblib.dump(voting_model, "./models/voting_career_model.pkl")
+joblib.dump(target_encoder, "./models/target_encoder.pkl")
+joblib.dump(label_encoders, "./models/label_encoders.pkl")
 print("Mô hình Voting Classifier và mã hóa đã được lưu!")
