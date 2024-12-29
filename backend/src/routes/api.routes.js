@@ -2,6 +2,7 @@ const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
 const { login, getSummaryMark, getListMarkDetail, getCourseSubject } = require('../controllers/student.controller');
 const { chatCompletion } = require('../controllers/openai.controller');
+const { importDataFromCSV, findStudyMaterials, getAllStudyMaterials } = require('../controllers/study_material.controller');
 const router = express.Router();
 
 // student
@@ -19,5 +20,11 @@ router.post('/predict/career', predictCareer);
 
 // openai
 router.post('/openai/chat', chatCompletion);
+
+
+// study material
+// router.post('/studyMaterial', importDataFromCSV);
+router.post('/studyMaterials/search', findStudyMaterials);
+router.get('/studyMaterials', getAllStudyMaterials);
 
 module.exports = router;
