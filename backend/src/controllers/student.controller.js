@@ -1,57 +1,41 @@
 const axios = require('axios');
+const { formatDate } = require('../utils');
 
 const baseUrl = 'https://sinhvien1.tlu.edu.vn';
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
-// login
-const login = async (req, res, next) => {
+// get token tlu
+const getTokenTlu = async (username, password) => {
     try {
         const apiUrl = `${baseUrl}/education/oauth/token`;
 
         // Mẫu body request
         // {
-        //     "client_id": "education_client",
-        //     "grant_type": "password",
         //     "username": "",
         //     "password": "",
-        //     "client_secret": "password"
         // }
 
-        // Dữ liệu gửi đi từ body của client
-        const requestData = req.body;
+        // const {username, password} = req.body;
+        const requestData = {
+            "client_id": "education_client",
+            "grant_type": "password",
+            "username": username,
+            "password": password,
+            "client_secret": "password"
+        };
 
-        // Gửi yêu cầu POST đến API
-        const response = await axios.post(apiUrl, requestData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await axios.post(apiUrl, requestData);
 
-        // Trả kết quả từ API cho client
-        res.status(200).json({
-            message: 'Get token success',
-            token: `Bearer ${response.data['access_token']}`,
-            // data: response.data
-        });
+        return `Bearer ${response.data['access_token']}`;
     } catch (error) {
-        res.status(error.response?.status || 500).json({
-            message: error.message,
-        });
+        return error.message;
     }
 };
 
-const getListMarkDetail = async (req, res, next) => {
+const getListMarkDetail = async (token) => {
     try {
-        const apiUrl = `${baseUrl}/education/api/studentsubjectmark/getListMarkDetailStudent`;     
-
-        const token = req.headers.authorization;
-
-        if (!token) {
-            return res.status(400).json({
-                message: 'Authorization token is required',
-            });
-        }
+        const apiUrl = `${baseUrl}/education/api/studentsubjectmark/getListMarkDetailStudent`;
 
         const response = await axios.get(apiUrl, {
             headers: {
@@ -59,37 +43,28 @@ const getListMarkDetail = async (req, res, next) => {
             },
         });
 
-        const result = response.data.map(item => {
-            return {
-                subjectName: item['subject']['subjectName'],
-                mark: item['mark'],
-                mark4: item['mark4'],
-                charmark: item['charMark']
-            };
-        });
+        const excludedSubjects = ['Chủ nghĩa xã hội khoa học', 'Kinh tế chính trị Mác - Lênin', 'Kỹ năng mềm và tinh thần khởi nghiệp', 'Lịch sử Đảng Cộng sản Việt Nam', 'Pháp luật đại cương', 'Triết học Mác - Lênin', 'Tư tưởng Hồ Chí Minh'];
 
-        res.status(200).json({
-            message: 'Get list mark success',
-            data: result
-        });
+        const result = response.data
+            .filter(item => !excludedSubjects.includes(item.subject.subjectName))
+            .map(item => {
+                return {
+                    subjectName: item['subject']['subjectName'],
+                    mark: item['mark'],
+                    mark4: item['mark4'],
+                    charmark: item['charMark']
+                };
+            });
+
+        return result;
     } catch (error) {
-        res.status(error.response?.status || 500).json({
-            message: error.message
-        });
+        return null;
     }
 };
 
-const getSummaryMark = async (req, res, next) => {
+const getSummaryMark = async (token) => {
     try {
         const apiUrl = `${baseUrl}/education/api/studentsummarymark/getbystudent`;
-
-        const token = req.headers.authorization;
-
-        if (!token) {
-            return res.status(400).json({
-                message: 'Authorization token is required',
-            });
-        }
 
         const response = await axios.get(apiUrl, {
             headers: {
@@ -116,28 +91,15 @@ const getSummaryMark = async (req, res, next) => {
             "gpa10": data['mark']
         };
 
-        res.status(200).json({
-            message: 'Get student info success',
-            data: result
-        });
+        return result
     } catch (error) {
-        res.status(error.response?.status || 500).json({
-            message: error.message
-        });
+        return null;
     }
 };
 
-const getCourseSubject = async (req, res, next) => {
+const getCourseSubject = async (token) => {
     try {
         const apiUrl = `${baseUrl}/education/api/StudentCourseSubject/studentLoginUser/11`;
-
-        const token = req.headers.authorization;
-
-        if (!token) {
-            return res.status(400).json({
-                message: 'Authorization token is required',
-            });
-        }
 
         const response = await axios.get(apiUrl, {
             headers: {
@@ -146,38 +108,46 @@ const getCourseSubject = async (req, res, next) => {
         });
 
         const data = response.data;
-        const options = { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'Asia/Ho_Chi_Minh' };
-        const result = data.map(item => {
-            const startDate = new Date(item['courseSubject']['semesterSubject']['semester']['startDate']);
-            const endDate = new Date(item['courseSubject']['semesterSubject']['semester']['endDate']);
-            return {
-                subjectName: item['subjectName'],
-                subjectCode: item['subjectCode'],
-                numberOfCredit: item['numberOfCredit'],
-                start: item['courseSubject']['timetables'][0]['startHour']['start'],
-                startString: item['courseSubject']['timetables'][0]['startHour']['startString'],
-                end: item['courseSubject']['timetables'][0]['endHour']['end'],
-                endString: item['courseSubject']['timetables'][0]['endHour']['endString'],
-                // startDate: item['courseSubject']['semesterSubject']['semester']['startDate'],
-                // endDate: item['courseSubject']['semesterSubject']['semester']['endDate']
-                startDate: new Intl.DateTimeFormat('vi-VN', options).format(startDate),
-                endDate: new Intl.DateTimeFormat('vi-VN', options).format(endDate)
-            };
-        });
+        const filterDate = new Date('2024-11-11');
+        let result = data
+            .map(item => {
 
-        res.status(200).json({
-            message: 'Get info course subjects success',
-            data: result
-        });
+                const startDate = item['courseSubject']['timetables'][0]['startDate'];
+                const endDate = item['courseSubject']['timetables'][0]['endDate'];
+
+                if (startDate < filterDate) {
+                    return null;
+                }
+
+                let timetablesArray = [];
+                const timetables = item['courseSubject']['timetables'];
+
+                for (let i = 0; i < timetables.length; i++) {
+                    const weekIndex = timetables[i]['weekIndex'];
+                    const startHour = timetables[i]['startHour']['startString'];
+                    const endHour = timetables[i]['endHour']['endString'];
+
+                    timetablesArray.push({ weekIndex, startHour, endHour });
+                }
+
+                return {
+                    subjectName: item['subjectName'],
+                    subjectCode: item['subjectCode'],
+                    timetables: timetablesArray,
+                    startDate: formatDate(startDate),
+                    endDate: formatDate(endDate)
+                };
+            })
+            .filter(item => item !== null);
+
+        return result;
     } catch (error) {
-        res.status(error.response?.status || 500).json({
-            message: error.message
-        });
+        return null;
     }
 };
 
 module.exports = {
-    login,
+    getTokenTlu,
     getListMarkDetail,
     getSummaryMark,
     getCourseSubject

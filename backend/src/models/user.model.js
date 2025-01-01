@@ -11,9 +11,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    uid: {
+        type: String,
+        required: false,
+    },
     email: {
         type: String,
-        required: true,
+        required: false,
         unique: true,
     },
     role: {
@@ -23,11 +27,20 @@ const userSchema = new mongoose.Schema({
     },
     full_name: {
         type: String,
-        required: true,
+        required: false,
         trim: true,
     },
+    gender: {
+        type: String,
+        enum: ['M', 'FM'],
+        required: false
+    },
     date_of_birth: {
-        type: Date,
+        type: String,
+        required: false,
+    },
+    department: {
+        type: String,
         required: false,
     },
     major: {
@@ -45,16 +58,24 @@ const userSchema = new mongoose.Schema({
         required: false,
     },
     study_schedule: {
-        type: Object,
-        default: {},
+        type: Array,
+        default: [],
+    },
+    list_mark: {
+        type: Array,
+        default: [],
+    },
+    isSynced: {
+        type: Boolean,
+        default: false
     },
     created_at: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
     updated_at: {
         type: Date,
-        default: Date.now,
+        default: Date.now
     },
 });
 

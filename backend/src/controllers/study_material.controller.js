@@ -78,8 +78,23 @@ const findStudyMaterials = async (req, res, next) => {
 };
 
 const getAllStudyMaterials = async (req, res, next) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
+    const pageRq = parseInt(req.query.page);
+    const limitRq = parseInt(req.query.limit);
+
+    if (pageRq <= 0) {
+        return res.status(400).json({
+            message: 'page must be a positive number',
+        });
+    }
+
+    if (limitRq <= 0) {
+        return res.status(400).json({
+            message: 'limit must be a positive number',
+        });
+    }
+
+    const page = pageRq || 1;
+    const limit = limitRq || 10;
     const skip = (page - 1) * limit;
 
     try {
