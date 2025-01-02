@@ -1,15 +1,20 @@
 const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
-const { login, getSummaryMark, getListMarkDetail, getCourseSubject } = require('../controllers/student.controller');
 const { chatCompletion } = require('../controllers/openai.controller');
-const { importDataFromCSV, findStudyMaterials, getAllStudyMaterials } = require('../controllers/study_material.controller');
+const { findStudyMaterials, getAllStudyMaterials } = require('../controllers/study_material.controller');
+const { signup, login, syncDataStudent } = require('../controllers/user.controller');
+const { authenticateToken } = require('../middleware/auth.middleware');
 const router = express.Router();
 
-// student
+// auth
+router.post('/signup', signup);
 router.post('/login', login);
-router.get('/student/getSummaryMark', getSummaryMark);
-router.get('/student/getDetailsMark', getListMarkDetail);
-router.get('/student/getCourseSubject', getCourseSubject);
+
+// middleware auth
+router.use(authenticateToken);
+
+// student
+router.post('/student/syncData', syncDataStudent);
 
 // jobs
 router.post('/jobs/search', searchJobs);

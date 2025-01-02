@@ -12,7 +12,7 @@ app.use(helmet()); // protect info header
 // cors
 const corsOptions = {
     origin: '*',
-    methods: ['GET', 'POST'], 
+    methods: ['GET', 'POST', 'PUT', 'PATCH'], 
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 };

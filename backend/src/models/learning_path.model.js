@@ -11,7 +11,7 @@ const learningPathSchema = new mongoose.Schema({
         required: true,
     },
     content: {
-        type: Object, // JSON object to store the learning path content
+        type: Object,
         required: true,
     },
     created_at: {
