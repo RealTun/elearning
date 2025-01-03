@@ -1,59 +1,43 @@
-#Sidebar {
-  position: sticky;
+.sidebar {
+  width: 210px;
+  background-color: #000;
+  color: #fff;
   height: 100vh;
-  width: 70px;
-  overflow: hidden;
-  transition: 0.5s;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  position: sticky;
 }
 
-#Sidebar:hover {
-  width: 280px;
-  transition: 0.5s;
-}
-
-.logo {
+.sidebar h2 {
+  margin-bottom: 20px;
   text-align: center;
-  display: flex;
-  margin: 0;
+  width: 100%; /* Căn giữa toàn phần */
 }
-.logo img {
-  margin-left: 14px;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
+
+.sidebar ul {
+  list-style: none;
 }
-.logo span {
-  font-weight: bold;
-  padding-left: 15px;
-  font-size: 18px;
-  text-transform: uppercase;
-}
-a {
-  position: relative;
-  color: rgb(85, 83, 83);
+
+.sidebar ul li {
+  margin: 10px 0px;
   display: block;
-  width: 280px;
-  padding: 12px 8px;
-  padding-left: 0;
-  font-weight: bold;
 }
-#Sidebar .fas {
-  position: relative;
-  width: 70px !important;
-  font-size: 20px;
-  text-align: center;
+
+.sidebar ul li a {
+  color: #ccc;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 10px;
 }
-#Sidebar .nav-item {
-  position: relative;
-  top: 12px;
-  margin-left: 10px;
+
+.sidebar ul li a i {
+  margin-right: 10px; /* Khoảng cách giữa icon và text */
+  font-size: 20px; /* Kích thước icon */
 }
-a:hover {
-  background: var(--hover);
-  color: var(--foreground-hover);
-}
-.logout {
-  position: absolute;
-  bottom: 0;
+
+.sidebar ul li a:hover,
+.sidebar ul li a.active {
+  background-color: #444;
+  color: #fff;
+  cursor: pointer;
 }
