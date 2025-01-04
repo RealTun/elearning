@@ -11,11 +11,12 @@ import Login from "./components/Pages/Login/Login";
 import Setting from "./components/Pages/Setting/Setting";
 
 const App = () => {
+  //test check ui login
   const location = useLocation();
   const isLoginRoute = location.pathname === "/login";
   return (
     <div className="container-wrapper">
-    {!isLoginRoute &&  <SideBar />}
+    {!isLoginRoute && <SideBar />}
 
       <div className="main">  
         {/* Các Routes */}
@@ -33,7 +34,5 @@ const App = () => {
     </div>
   );
 };
-
-
 
 export default App;

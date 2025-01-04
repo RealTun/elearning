@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 import "./Login.css";
 
 const Login = () => {
@@ -25,7 +25,7 @@ const Login = () => {
     }, 2000); // Giả lập 2 giây xử lý
   };
 
-
+  
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
       <div className="login-container shadow-lg">
