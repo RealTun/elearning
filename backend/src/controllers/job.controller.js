@@ -10,8 +10,7 @@ const searchJobs = async (req, res, next) => {
     try {
         const apiUrl = `https://ms.vietnamworks.com/job-search/v1.0/search`;
 
-        // const requestData = req.body;
-        const keyword = req.body.keyword
+        const { keyword, limit, page } = req.body;
         // console.log(keyword);
 
         const bodyToSendRequest = {
@@ -20,17 +19,19 @@ const searchJobs = async (req, res, next) => {
             "filter": [
                 {
                     "field": "workingLocations.cityId",
-                    "value": "24,29"
+                    // "value": "24,29"
+                    "value": "24"
                 },
                 {
                     "field": "workingLocations.districtId",
-                    "value": "[{\"cityId\":24,\"districtId\":[-1]},{\"cityId\":29,\"districtId\":[-1]}]"
+                    // "value": "[{\"cityId\":24,\"districtId\":[-1]},{\"cityId\":29,\"districtId\":[-1]}]"
+                    "value": "[{\"cityId\":24,\"districtId\":[-1]}]"
                 }
             ],
             "ranges": [],
             "order": [],
-            "hitsPerPage": 20,
-            "page": 0,
+            "hitsPerPage": limit || 3,
+            "page": page || 0,
             "retrieveFields": [
                 "address",
                 "benefits",
@@ -105,16 +106,16 @@ const findCompanyByName = async (req, res, next) => {
     try {
         const apiUrl = `https://ms.vietnamworks.com/company-profile/v1.0/company/search`;
 
-        const keyword = req.body.keyword
+        const { keyword, limit, page } = req.body.keyword
         // console.log(keyword);
 
         const bodyToSendRequest = {
             "query": `${keyword}`,
             "order": [],
             "facets": [],
-            "hitsPerPage": 10,
+            "hitsPerPage": limit || 0,
             "filter": [],
-            "page": 0,
+            "page": page || 0,
             "userId": 0,
             "isJobs": true
         }

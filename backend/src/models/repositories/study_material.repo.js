@@ -6,12 +6,13 @@ const StudyMaterial = require("../study_material.model");
 const findStudyMaterialsByKeyword = async (keyword) => {
     try {
         const results = await StudyMaterial.find({
-            $text: { $search: keyword }
-            // $and: [
-            //     { title: { $regex: keyword, $options: 'i' } }, // Tìm kiếm không phân biệt hoa thường
-            //     { playlist_title: { $regex: keyword, $options: 'i' } },
-            // ],
+            // $text: { $search: keyword }
+            $and: [
+                { title: { $regex: keyword, $options: 'i' } }, // Tìm kiếm không phân biệt hoa thường
+                { playlist_title: { $regex: keyword, $options: 'i' } },
+            ],
         })
+        .sort('created_at')
         .limit(100); // Giới hạn số lượng kết quả
         return results;
     } catch (error) {

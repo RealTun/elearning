@@ -9,13 +9,12 @@ const SECRET_KEY = process.env.JWT_SECRET;
 const generateToken = async (user) => {
     const payload = {
         username: user.username,
-        password: user.password
+        password: user.password,
+        role: user.role
     };
     
-    console.log('SECRET_KEY:', SECRET_KEY);
-
     const token = jwt.sign(payload, SECRET_KEY, {
-        expiresIn: '2h',
+        expiresIn: '3h',
     });
 
     return token;
