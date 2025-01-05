@@ -16,7 +16,7 @@ const fieldMapping = {
 const importDataFromCSV = async (req, res, next) => {
     try {
         const results = [];
-        const filePath = path.resolve(__dirname, '../dbs/youtube_data.csv');
+        const filePath = path.resolve(__dirname, '../dbs/youtube_data1.csv');
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on('data', (row) => {

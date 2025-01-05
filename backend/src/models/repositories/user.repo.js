@@ -29,7 +29,7 @@ const findUserByUid = async (username) => {
 
 const createUser = async (username, password) => {
     try {
-        const newUser = new User({username, password});
+        const newUser = new User({ username, password });
 
         await newUser.save();
         return newUser;
@@ -59,9 +59,24 @@ const updateUser = async (username, updateData) => {
     }
 };
 
+const updateRoleUser = async (username) => {
+    const userUpdated = await User.findOneAndUpdate(
+        { username: username},
+        { role: 'paid_user', updated_at: Date.now() },
+        { new: true, runValidators: true }
+    ).select(unGetSelectData(['__v', 'password', 'created_at', 'updated_at']));
+
+    if(!userUpdated){
+        return null;
+    }
+
+    return userUpdated;
+}
+
 module.exports = {
     isExistedUser,
     findUserByUid,
     createUser,
-    updateUser
+    updateUser,
+    updateRoleUser
 }
