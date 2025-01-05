@@ -1,7 +1,6 @@
-import logo from "./logo.svg";
 import "./App.css";
 import SideBar from "./components/SideBar/SideBar";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link ,useLocation} from "react-router-dom";
 import Dashboard from "./components/Pages/Dashboard/Dashboard";
 import Course from "./components/Pages/Course/Course";
 import Document from "./components/Pages/Document/Document";
@@ -11,24 +10,29 @@ import Schedule from "./components/Pages/Schedule/Schedule";
 import Login from "./components/Pages/Login/Login";
 import Setting from "./components/Pages/Setting/Setting";
 
-function App() {
+const App = () => {
+  //test check ui login
+  const location = useLocation();
+  const isLoginRoute = location.pathname === "/login";
   return (
-    <div className="App">
-      <SideBar />
-      <div className="main">
+    <div className="container-wrapper">
+    {!isLoginRoute && <SideBar />}
+
+      <div className="main">  
+        {/* Các Routes */}
         <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/home" element={<Course />} />
-          <Route path="/ranking" element={<Document />} />
-          <Route path="/summary" element={<FindWork />} />
-          <Route path="/report" element={<Profile />} />
-          <Route path="/profile" element={<Schedule />} />
-          <Route path="/settings" element={<Setting />} />
-          <Route path="/help" element={<Login />} />
+          <Route path="/course" element={<Course />} />
+          <Route path="/document" element={<Document />} />
+          <Route path="/findwork" element={<FindWork />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/setting" element={<Setting />} />
         </Routes>
       </div>
     </div>
   );
-}
+};
 
 export default App;
