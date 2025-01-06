@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const { findUserByUid, isExistedUser, createUser, updateUser, updateRoleUser } = require('../models/repositories/user.repo');
 const { generateToken } = require('../services/token.service');
 const { getTokenTlu, getSummaryMark, getListMarkDetail, getCourseSubject } = require('./student.controller');
-const { parseDate, parseTimestampToDate, formatDate } = require('../utils');
+const { parseDate, parseTimestampToDate, formatDate, getInfoData, pickFieldObject } = require('../utils');
 
 const signup = async (req, res) => {
     try {
@@ -82,6 +82,24 @@ const login = async (req, res) => {
     }
 };
 
+const getCurrentUser = async (req, res) => {
+    try {
+        const userFound = await findUserByUid(req.user.username);
+        const fields = ['uid', 'role', 'class', 'date_of_birth', 'department', 'email', 'full_name', 'gender', 'gpa', 'major', 'list_mark', 'study_schedule'];
+
+        const data = pickFieldObject(fields, userFound);
+        return res.status(200).json({
+            message: 'Get current user success',
+            data: data,
+        });
+    }
+    catch (error) {
+        res.status(error.response?.status || 500).json({
+            message: error.message,
+        });
+    }
+}
+
 const syncDataStudent = async (req, res) => {
     try {
 
@@ -152,6 +170,7 @@ const updateRole = async (req, res) => {
 module.exports = {
     signup,
     login,
+    getCurrentUser,
     syncDataStudent,
     updateRole
 }
