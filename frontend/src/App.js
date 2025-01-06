@@ -9,6 +9,7 @@ import Profile from "./components/Pages/Profile/Profile";
 import Schedule from "./components/Pages/Schedule/Schedule";
 import Login from "./components/Pages/Login/Login";
 import Setting from "./components/Pages/Setting/Setting";
+import Chatbot from "./components/Pages/Chatbot/Chatbot";
 
 const App = () => {
   //test check ui login
@@ -20,6 +21,7 @@ const App = () => {
 
       <div className="main">  
         {/* Các Routes */}
+        {/* <Headers></Headers> */}
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
@@ -27,6 +29,7 @@ const App = () => {
           <Route path="/document" element={<Document />} />
           <Route path="/findwork" element={<FindWork />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/setting" element={<Setting />} />
         </Routes>

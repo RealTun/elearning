@@ -1,40 +1,41 @@
-import React from "react";
+import React, { Children } from "react";
 
-const Header = ({ userName, children }) => {
+const Header = ({ username,title,middleContent }) => {
   return (
-    <div className="container-fluid mb-4 mt-3">
+    <div className="container-fluid p-3 bg-white shadow-sm">
       <div className="row align-items-center">
-        {/* Phần "Tổng quan" */}
-        <div className="col-md-4 text-start d-flex align-items-center">
-          <h4 className="mb-0">{children}</h4>
+        {/* Phần "Welcome Back" */}
+        <div className="col-md-3 text-start">
+          <h5 className="mb-0 fw-bolder">{title}</h5>
         </div>
 
         {/* Thanh tìm kiếm */}
-        <div className="col-md-4 text-center">
-            <div className="input-group rounded-5 border border-dark">
-                <span className="input-group-text bg-white border-0 rounded-start-5">
-                <i className="fa-solid fa-magnifying-glass"></i>
-                </span>
-                <input
-                type="text"
-                className="form-control border-0 rounded-end-5"
-                placeholder="Tìm kiếm..."
-                style={{ height: '38px' }}
-                />
-            </div>
+        <div className="col-md-5">
+          {middleContent}
         </div>
 
-        {/* Thông báo và tên người dùng */}
-        <div className="col-md-4 text-end d-flex justify-content-end align-items-center">
-            <button className="btn btn-light position-relative me-3 ">
-                {/* 🔔 */}
-                 <i class="fa-regular fa-bell fa-lg"></i>
-                 {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">3</span> */}
-            </button>
-            <div className="d-flex justify-content-center align-items-center border border-black rounded-5 px-3 py-2">
-                <i className="fa-regular fa-circle-user fa-lg me-4"></i>
-                <span>{userName}</span>
-             </div>
+        {/* Thông báo và thông tin người dùng */}
+        <div className="col-md-4 text-end d-flex align-items-center justify-content-end">
+          {/* Icon tin nhắn */}
+          <button className="btn btn-light rounded-circle me-3">
+            <i className="fa-regular fa-comment fa-lg"></i>
+          </button>
+
+          {/* Icon thông báo */}
+          <button className="btn btn-light rounded-circle me-3">
+            <i className="fa-regular fa-bell fa-lg"></i>
+          </button>
+
+          {/* Avatar và tên */}
+          <div className="d-flex align-items-center">
+            <img
+              src="https://via.placeholder.com/40"
+              alt="User Avatar"
+              className="rounded-circle me-2"
+              style={{ width: "40px", height: "40px" }}
+            />
+            <span className="fw-bold">{username}</span>
+          </div>
         </div>
       </div>
     </div>

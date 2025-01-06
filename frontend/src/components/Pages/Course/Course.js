@@ -1,15 +1,22 @@
 import React from "react";
 import "./Course.css";
 import Header from "../../Header/Header";
+import SearchItem from "../../SearchItem/SearchItem";
+
 
 const Course = () => {
   return (
-    // <div className={`Course`}>
-    //   <h1>Đây là Component Course</h1>
-    // </div>
-    <div className="course-container">
-      <Header userName="HuongPTA">
-        <h4 className="course-title">Khóa học</h4>
+    <div className="course">
+      <Header 
+        username="HuongPTA" 
+        title="Khóa học"
+        middleContent={
+          <div className="d-flex justify-content-between align-items-center">
+            <SearchItem />
+            {/* <FilterItem /> */}
+          </div>
+        }     
+      >
       </Header>
       {/* Nội dung khác */}
     </div>
