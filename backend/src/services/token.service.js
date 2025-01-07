@@ -8,6 +8,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 // Tạo token
 const generateToken = async (user) => {
     const payload = {
+        _id: user._id,
         username: user.username,
         password: user.password,
         role: user.role

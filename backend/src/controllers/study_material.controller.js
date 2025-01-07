@@ -2,55 +2,77 @@ const fs = require('fs');
 const path = require('path');
 const csvParser = require('csv-parser');
 const StudyMaterial = require('../models/study_material.model');
-const { findStudyMaterialsByKeyword, getAllStudyMaterialsPaging } = require('../models/repositories/study_material.repo');
+const { findStudyMaterialsByKeyword, getAllStudyMaterialsPaging, findStudyMaterialsById } = require('../models/repositories/study_material.repo');
+const { convertToObjectIdMongodb } = require('../utils');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
-const fieldMapping = {
-    "title": "title",
-    "url": "url",
-    "playlist_title": "playlist_title",
-    "embed_code": "embed_code"
-};
-
-const importDataFromCSV = async (req, res, next) => {
+const importDataFromCSV = async (req, res) => {
     try {
         const results = [];
         const filePath = path.resolve(__dirname, '../dbs/youtube_data1.csv');
+
+        // Đọc dữ liệu từ CSV
         fs.createReadStream(filePath)
             .pipe(csvParser())
             .on('data', (row) => {
                 const data = {
-                    'title': row['title'],
-                    'url': row['url'],
-                    'playlist_title': row['playlist_title'],
-                    'embed_code': row['embed_code'],
+                    title: row['title'],
+                    url: row['url'],
+                    playlist_title: row['playlist_title'],
+                    embed_code: row['embed_code'],
                 };
                 results.push(data);
             })
             .on('end', async () => {
                 console.log('CSV file successfully processed');
-                // Thêm dữ liệu vào MongoDB
+
                 try {
-                    await StudyMaterial.insertMany(results);
+                    // Nhóm dữ liệu theo `playlist_title`
+                    const groupedData = results.reduce((acc, item) => {
+                        const { playlist_title, title, url, embed_code } = item;
+
+                        if (!acc[playlist_title]) {
+                            acc[playlist_title] = [];
+                        }
+
+                        acc[playlist_title].push({
+                            title,
+                            type: 'video',
+                            url,
+                            embed_code,
+                        });
+
+                        return acc;
+                    }, {});
+
+                    // Tạo danh sách document để chèn vào MongoDB
+                    const documents = Object.keys(groupedData).map((playlist_title) => ({
+                        playlist_title,
+                        list_video: groupedData[playlist_title],
+                    }));
+
+                    // Chèn vào MongoDB
+                    await StudyMaterial.insertMany(documents);
+
                     res.status(201).json({
                         message: 'Insert data success',
-                        data: []
+                        data: documents,
                     });
                 } catch (err) {
                     res.status(400).json({
-                        message: err.message
+                        message: err.message,
                     });
                 }
             });
     } catch (err) {
         res.status(err.response?.status || 500).json({
-            message: err.message
+            message: err.message,
         });
     }
 };
 
-const findStudyMaterials = async (req, res, next) => {
+const findStudyMaterials = async (req, res) => {
     // example body 
     // {
     //     "keyword": ""
@@ -77,7 +99,7 @@ const findStudyMaterials = async (req, res, next) => {
     }
 };
 
-const getAllStudyMaterials = async (req, res, next) => {
+const getAllStudyMaterials = async (req, res) => {
     const pageRq = parseInt(req.query.page);
     const limitRq = parseInt(req.query.limit);
 
@@ -94,14 +116,20 @@ const getAllStudyMaterials = async (req, res, next) => {
     }
 
     const page = pageRq || 1;
-    const limit = limitRq || 10;
+    const limit = limitRq || 5;
     const skip = (page - 1) * limit;
 
     try {
         const results = await getAllStudyMaterialsPaging(skip, limit);
+        const data = results.map(item => ({
+            _id: item._id,
+            playlist_title: item.playlist_title,
+            count_video: item.list_video.length,
+        }));
+
         res.status(200).json({
             message: 'Get study materials successful',
-            data: results,
+            data: data,
         });
     } catch (error) {
         res.status(500).json({
@@ -110,8 +138,38 @@ const getAllStudyMaterials = async (req, res, next) => {
     }
 };
 
+const getStudyMaterialsbyId = async(req, res) => {
+    try {
+        const playListId = convertToObjectIdMongodb(req.params.id);
+        if(!playListId){
+            return res.status(400).json({
+                message: 'Id StudyMaterial not correct format',
+            });
+        }
+
+        const results = await findStudyMaterialsById(playListId);
+
+        if(!results){
+            return res.status(400).json({
+                message: 'StudyMaterial not found',
+            });
+        }
+
+        res.status(200).json({
+            message: 'Search successful',
+            data: results,
+        });
+    } catch (error) {
+        res.status(500).json({
+            // message: 'Error searching records',
+            error: error.message,
+        });
+    }
+}
+
 module.exports = {
     importDataFromCSV,
     findStudyMaterials,
-    getAllStudyMaterials
+    getAllStudyMaterials,
+    getStudyMaterialsbyId
 };

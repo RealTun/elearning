@@ -1,7 +1,7 @@
 const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
 const { chatCompletion, suggest } = require('../controllers/openai.controller');
-const { findStudyMaterials, getAllStudyMaterials, importDataFromCSV } = require('../controllers/study_material.controller');
+const { findStudyMaterials, getAllStudyMaterials, importDataFromCSV, getStudyMaterialsbyId } = require('../controllers/study_material.controller');
 const { signup, login, syncDataStudent, updateRole, getCurrentUser } = require('../controllers/user.controller');
 const { authenticateToken, checkRole } = require('../middleware/auth.middleware');
 const router = express.Router();
@@ -31,6 +31,7 @@ router.post('/predict/career', predictCareer);
 // router.post('/studyMaterial', importDataFromCSV);
 router.post('/studyMaterials/search', findStudyMaterials);
 router.get('/studyMaterials', getAllStudyMaterials);
+router.get('/studyMaterials/:id', getStudyMaterialsbyId);
 
 // middleware role
 router.use(checkRole('paid_user'));

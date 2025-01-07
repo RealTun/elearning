@@ -118,6 +118,12 @@ const syncDataStudent = async (req, res) => {
         const listMarkDetail = await getListMarkDetail(tokenTlu);
         const courseSubject = await getCourseSubject(tokenTlu);
 
+        if(summaryMark === null || listMarkDetail === null || courseSubject === null){
+            return res.status(400).json({
+                message: 'Error get info student from TLU'
+            });
+        }
+
         const updateData = {
             "uid": summaryMark.uid,
             "email": summaryMark.email,

@@ -46,13 +46,32 @@ const suggest = async (req, res) => {
 
     const userFound = await findUserByUid(username);
 
-    const markLowTop1 = userFound.list_mark
-                        .sort((a, b) => a.mark - b.mark)
-                        .slice(0, 1);
+    const markOrderLow = userFound.list_mark
+      .sort((a, b) => a.mark - b.mark)
+    // .slice(0, 1);
 
-    const listVid = await findStudyMaterialsByKeyword(markLowTop1[0].subjectName);
+    const listVid = await findStudyMaterialsByKeyword(markOrderLow[0].subjectName);
 
-    // const prompt = "";
+    console.log(req.user);
+
+    const exampleResponse = [
+      {
+        "day": "Thứ Hai",
+        "time": "10:00",
+        "video_title": "",
+        "url": "",
+        "embed_code": ""
+      },
+      {
+        "day": "Thứ Ba",
+        "time": "14:00",
+        "video_title": "",
+        "url": "",
+        "embed_code": ""
+      },
+    ];
+
+    // const prompt = `Hãy cho tôi lịch tự học các video trong ${listVid} có cả thứ trong tuần, giờ học, hãy chỉ trả lời cho tôi ra dạng response như mẫu ${exampleResponse} để tôi có thể lấy dùng cho frontend, không trả lời thêm các từ khác`;
     // const response = await openai.chat.completions.create({
     //   messages: [
     //     {
@@ -69,7 +88,8 @@ const suggest = async (req, res) => {
 
     res.status(200).json({
       message: 'Get content success',
-      data: listVid,
+      // data: JSON.parse(content),
+      // data: content,
     });
   } catch (error) {
     res.status(error.response?.status || 500).json({
