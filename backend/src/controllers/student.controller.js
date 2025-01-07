@@ -43,7 +43,7 @@ const getListMarkDetail = async (token) => {
             },
         });
 
-        const excludedSubjects = ['Chủ nghĩa xã hội khoa học', 'Kinh tế chính trị Mác - Lênin', 'Kỹ năng mềm và tinh thần khởi nghiệp', 'Lịch sử Đảng Cộng sản Việt Nam', 'Pháp luật đại cương', 'Triết học Mác - Lênin', 'Tư tưởng Hồ Chí Minh'];
+        const excludedSubjects = ['Chủ nghĩa xã hội khoa học', 'Kinh tế chính trị Mác - Lênin', 'Kỹ năng mềm và tinh thần khởi nghiệp', 'Lịch sử Đảng Cộng sản Việt Nam', 'Pháp luật đại cương', 'Triết học Mác - Lênin', 'Tư tưởng Hồ Chí Minh', 'Tiếng Anh 1', 'Tiếng Anh 2', 'Tiếng Anh chuyên ngành công nghệ thông tin', 'Đại số tuyến tính', 'Giải tích hàm một biến', 'Giải tích hàm nhiều biến', 'Xác suất thống kê'];
 
         const result = response.data
             .filter(item => !excludedSubjects.includes(item.subject.subjectName))

@@ -1,8 +1,8 @@
 import React from "react";
 import "./Schedule.css";
-import Header from "../../Header/Header";
-import SearchItem from "../../SearchItem/SearchItem";
-import TableSchedule from "../../Table/TableSchedule/TableSchedule";
+import Header from "../../layouts/Header/Header";
+import SearchItem from "../../components/SearchItem/SearchItem";
+import TableSchedule from "../../components/Table/TableSchedule";
 
 const Schedule = () => {
   return (

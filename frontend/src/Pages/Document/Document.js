@@ -1,7 +1,7 @@
 import React from "react";
 import "./Document.css";
-import Header from "../../Header/Header";
-import SearchItem from "../../SearchItem/SearchItem";
+import Header from "../../layouts/Header/Header";
+import SearchItem from "../../components/SearchItem/SearchItem";
 
 const Document = () => {
   return (

@@ -1,6 +1,6 @@
 import React from "react";
 import "./Profile.css";
-import Header from "../../Header/Header";
+import Header from "../../layouts/Header/Header";
 
 const Profile = () => {
   return (
