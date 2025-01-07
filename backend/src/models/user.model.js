@@ -65,10 +65,6 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
-    learning_path: {
-        type: Array,
-        default: [],
-    },
     isSynced: {
         type: Boolean,
         default: false

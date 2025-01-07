@@ -13,6 +13,7 @@ const findStudyMaterialsByKeyword = async (keyword) => {
                 { playlist_title: { $regex: keyword, $options: 'i' } },
             ],
         })
+        .populate('list_video', '_id title url embed_code')
         .sort('created_at')
         .select(unGetSelectData(['__v', 'type', 'created_at']));
         return results;
@@ -24,6 +25,7 @@ const findStudyMaterialsByKeyword = async (keyword) => {
 const getAllStudyMaterialsPaging = async (skip, limit) => {
     try {
         const results = await StudyMaterial.find()
+        .populate('list_video', '_id title url embed_code')
         .sort({ createdAt: -1 }) // Sắp xếp giảm dần theo `createdAt`
         .skip(skip)
         .limit(limit)
@@ -36,7 +38,7 @@ const getAllStudyMaterialsPaging = async (skip, limit) => {
 
 const findStudyMaterialsById = async (playListId) => {
     try {
-        const results = await StudyMaterial.findById(playListId)
+        const results = await StudyMaterial.findById(playListId).populate('list_video', '_id title url embed_code');
         if(!results){
             return null;
         }

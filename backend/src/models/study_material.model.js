@@ -7,25 +7,8 @@ const studyMaterialSchema = new mongoose.Schema({
     },
     list_video: [
         {
-            title: {
-                type: String,
-                required: true,
-                trim: true,
-            },
-            type: {
-                type: String,
-                enum: ['pdf', 'video', 'link'],
-                required: true,
-                default: 'video'
-            },
-            url: {
-                type: String,
-                required: true,
-            },
-            embed_code: {
-                type: String,
-                required: true,
-            },
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Document',
         }
     ],
     created_at: {

@@ -1,19 +1,13 @@
 const scheduleSchema = new mongoose.Schema({
     course: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Course', // Khoá học liên quan
+        ref: 'StudyMaterial',
         required: true,
     },
     day: {
         type: Date, // Ngày học
         required: true,
     },
-    study_materials: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'StudyMaterial',
-        },
-    ],
     created_at: {
         type: Date,
         default: Date.now,

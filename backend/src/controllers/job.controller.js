@@ -6,7 +6,7 @@ const path = require('path');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
-const searchJobs = async (req, res, next) => {
+const searchJobs = async (req, res) => {
     try {
         const apiUrl = `https://ms.vietnamworks.com/job-search/v1.0/search`;
 
@@ -102,7 +102,7 @@ const searchJobs = async (req, res, next) => {
     }
 };
 
-const findCompanyByName = async (req, res, next) => {
+const findCompanyByName = async (req, res) => {
     try {
         const apiUrl = `https://ms.vietnamworks.com/company-profile/v1.0/company/search`;
 
@@ -142,7 +142,7 @@ const findCompanyByName = async (req, res, next) => {
     }
 };
 
-const predictCareer = async (req, res, next) => {
+const predictCareer = async (req, res) => {
     try {
         // example body
         // {
@@ -162,15 +162,17 @@ const predictCareer = async (req, res, next) => {
         // Tạo command để chạy script Python
         const pythonCommand = `python ${pythonFilePath} --age ${body.age} --gpa ${body.gpa} --domain "${body.domain}" --projects "${body.projects}" --python ${body.python} --sql ${body.sql} --java ${body.java}`;
 
+        // console.log(pythonCommand);
+
         // Chạy lệnh Python
         exec(pythonCommand, (error, stdout, stderr) => {
             if (error) {
                 // console.error(`Error: ${error.message}`);
-                return res.status(500).json({ message: 'Python script error', error: error.message });
+                return res.status(503).json({ message: 'Python script error', error: error.message });
             }
             if (stderr) {
                 // console.error(`Stderr: ${stderr}`);
-                return res.status(500).json({ message: 'Python script stderr', error: stderr });
+                return res.status(503).json({ message: 'Python script stderr', error: stderr });
             }
             // console.log(`Output: ${stdout}`);
             return res.status(200).json({ message: 'Predict career success', data: stdout });

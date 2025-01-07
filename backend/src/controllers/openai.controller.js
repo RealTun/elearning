@@ -14,6 +14,13 @@ const chatCompletion = async (req, res) => {
     //   "prompt": "hãy khen tôi đẹp zai"
     // }
     const prompt = req.body.prompt;
+
+    if(prompt === ''){
+      return res.status(400).json({
+        message: 'prompt can not be blank',
+      });
+    }
+
     const response = await openai.chat.completions.create({
       messages: [
         {

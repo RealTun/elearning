@@ -4,6 +4,7 @@ const csvParser = require('csv-parser');
 const StudyMaterial = require('../models/study_material.model');
 const { findStudyMaterialsByKeyword, getAllStudyMaterialsPaging, findStudyMaterialsById } = require('../models/repositories/study_material.repo');
 const { convertToObjectIdMongodb } = require('../utils');
+const DocumentModel = require('../models/document.model');
 
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 
@@ -25,10 +26,8 @@ const importDataFromCSV = async (req, res) => {
                 results.push(data);
             })
             .on('end', async () => {
-                console.log('CSV file successfully processed');
-
                 try {
-                    // Nhóm dữ liệu theo `playlist_title`
+                    // Nhóm dữ liệu theo playlist_title
                     const groupedData = results.reduce((acc, item) => {
                         const { playlist_title, title, url, embed_code } = item;
 
@@ -46,28 +45,44 @@ const importDataFromCSV = async (req, res) => {
                         return acc;
                     }, {});
 
-                    // Tạo danh sách document để chèn vào MongoDB
-                    const documents = Object.keys(groupedData).map((playlist_title) => ({
-                        playlist_title,
-                        list_video: groupedData[playlist_title],
-                    }));
+                    const studyMaterials = [];
 
-                    // Chèn vào MongoDB
-                    await StudyMaterial.insertMany(documents);
+                    // Xử lý từng playlist và tạo Document
+                    for (const [playlist_title, videos] of Object.entries(groupedData)) {
+                        const documentIds = [];
+
+                        for (const videoData of videos) {
+                            const document = new DocumentModel(videoData);
+                            await document.save(); // Lưu vào collection Document
+                            documentIds.push(document._id); // Lấy ObjectId của document
+                        }
+
+                        const studyMaterial = new StudyMaterial({
+                            playlist_title,
+                            list_video: documentIds,
+                        });
+
+                        await studyMaterial.save(); // Lưu StudyMaterial vào collection
+                        studyMaterials.push(studyMaterial);
+                    }
 
                     res.status(201).json({
-                        message: 'Insert data success',
-                        data: documents,
+                        message: 'Data imported successfully',
+                        data: studyMaterials,
                     });
                 } catch (err) {
-                    res.status(400).json({
-                        message: err.message,
+                    console.error('Error during data import:', err.message);
+                    res.status(500).json({
+                        message: 'Error during data import',
+                        error: err.message,
                     });
                 }
             });
     } catch (err) {
-        res.status(err.response?.status || 500).json({
-            message: err.message,
+        console.error('Unexpected error:', err.message);
+        res.status(500).json({
+            message: 'Unexpected server error',
+            error: err.message,
         });
     }
 };
@@ -121,15 +136,15 @@ const getAllStudyMaterials = async (req, res) => {
 
     try {
         const results = await getAllStudyMaterialsPaging(skip, limit);
-        const data = results.map(item => ({
-            _id: item._id,
-            playlist_title: item.playlist_title,
-            count_video: item.list_video.length,
-        }));
+        // const data = results.map(item => ({
+        //     _id: item._id,
+        //     playlist_title: item.playlist_title,
+        //     count_video: item.list_video.length,
+        // }));
 
         res.status(200).json({
             message: 'Get study materials successful',
-            data: data,
+            data: results,
         });
     } catch (error) {
         res.status(500).json({
@@ -150,13 +165,13 @@ const getStudyMaterialsbyId = async(req, res) => {
         const results = await findStudyMaterialsById(playListId);
 
         if(!results){
-            return res.status(400).json({
+            return res.status(404).json({
                 message: 'StudyMaterial not found',
             });
         }
 
         res.status(200).json({
-            message: 'Search successful',
+            message: 'Get StudyMaterial successful',
             data: results,
         });
     } catch (error) {
