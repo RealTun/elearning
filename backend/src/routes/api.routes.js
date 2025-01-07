@@ -14,7 +14,7 @@ router.post('/login', login);
 router.use(authenticateToken);
 
 //user
-router.use('/user', getCurrentUser);
+router.get('/user', getCurrentUser);
 
 // student
 router.post('/student/syncData', syncDataStudent);
