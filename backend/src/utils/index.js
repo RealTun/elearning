@@ -3,10 +3,23 @@
 const _ = require('lodash')
 const { Types } = require('mongoose')
 
-const convertToObjectIdMongodb = id => new Types.ObjectId(id)
+const convertToObjectIdMongodb = (id) => {
+  try {
+    return new Types.ObjectId(id);
+  } catch (error) {
+    return null;
+  }
+};
 
 const getInfoData = ({ fields = [], object = {} }) => {
   return _.pick(object, fields)
+}
+
+const pickFieldObject = (fields = [], object = {}) => {
+  return Object.fromEntries(
+    Object.entries(object._doc || object)
+      .filter(([key]) => fields.includes(key))
+  );
 }
 
 // ['a', 'b'] => {a: 1, b: 1}
@@ -60,6 +73,7 @@ const formatDate = (timestamp) => {
 };
 
 module.exports = {
+  pickFieldObject,
   getInfoData,
   getSelectData,
   unGetSelectData,
