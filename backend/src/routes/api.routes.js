@@ -1,6 +1,6 @@
 const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
-const { chatCompletion, suggest } = require('../controllers/openai.controller');
+const { chatCompletion, suggest, chatWithAI, getChatHistory, clearChatHistory } = require('../controllers/openai.controller');
 const { findStudyMaterials, getAllStudyMaterials, importDataFromCSV, getStudyMaterialsbyId } = require('../controllers/study_material.controller');
 const { signup, login, syncDataStudent, updateRole, getCurrentUser, changePassword } = require('../controllers/user.controller');
 const { authenticateToken, checkRole } = require('../middleware/auth.middleware');
@@ -41,8 +41,10 @@ router.get('/documents/:id', getDocumentbyId);
 // middleware role
 router.use(checkRole('paid_user'));
 // openai
-router.post('/openai/chat', chatCompletion);
 router.post('/openai/suggest', suggest);
 
+router.post('/openai/chat', chatWithAI);
+router.get('/openai/chat/history', getChatHistory);
+router.delete('/openai/chat', clearChatHistory);
 
 module.exports = router;
