@@ -4,8 +4,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import "./Signup.css";
-
-const API_URL = "http://localhost:3010/api";
+import API_URL from "../../config/API_URL.js";
 
 const Signup = () => {
     const [username, setUsername] = useState("");

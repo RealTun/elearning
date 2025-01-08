@@ -10,7 +10,7 @@ import CardCourse from "../../components/Card/CardCourse";
 import img from "../../assets/images/python.jpg";
 import "./Course.css";
 
-import API_URL from "../../config/API_URL";
+import API_URL from "../../config/API_URL.js";
 import axios from "axios";
 
 // Tùy chỉnh nút mũi tên

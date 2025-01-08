@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import API_URL from "../../config/API_URL";
+import API_URL from "../../config/API_URL.js";
 import "./Login.css";
 
 const Login = () => {
