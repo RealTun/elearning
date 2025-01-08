@@ -13,6 +13,8 @@ const generateToken = async (user) => {
         password: user.password,
         role: user.role
     };
+
+    // console.log(payload);
     
     const token = jwt.sign(payload, SECRET_KEY, {
         expiresIn: '3h',
