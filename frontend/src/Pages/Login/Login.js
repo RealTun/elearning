@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import axios from "axios";
+import axios from "axios";
+import API_URL from "../../config/API_URL.js";
 import "./Login.css";
 
 const Login = () => {
@@ -15,16 +16,36 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Bắt đầu loading
-  
-    setTimeout(() => {
-      if (username === "admin" && password === "admin") {
+
+    try {
+      const response = await axios.post(`${API_URL}/login`, {
+        username,
+        password,
+      });
+
+      if (response.status === 200) {
         toast.success("Đăng nhập thành công!", { autoClose: 2000 });
-        setTimeout(() => navigate("/dashboard"), 2000); // Chuyển hướng sau 2 giây
-      } else {
-        toast.error("Tên đăng nhập hoặc mật khẩu không đúng!", { autoClose: 1500 });
+        const token = response.data.data;
+
+        localStorage.setItem("token", token);
+        navigate("/dashboard");
       }
+    } catch (error) {
+      if (error.response) {
+        const { status } = error.response;
+        if (status === 400) {
+          toast.error("Mật khẩu không đúng!", { autoClose: 1500 });
+        } else if (status === 404) {
+          toast.error("Người dùng không tồn tại!", { autoClose: 1500 });
+        } else {
+          toast.error("Lỗi server. Vui lòng thử lại sau!", { autoClose: 1500 });
+        }
+      } else {
+        toast.error("Không thể kết nối tới máy chủ!", { autoClose: 1500 });
+      }
+    } finally {
       setIsLoading(false); // Kết thúc loading
-    }, 2000); // Giả lập xử lý trong 2 giây
+    }
   };
 
   return (
@@ -34,22 +55,29 @@ const Login = () => {
         {/* Form đăng nhập */}
         <div className="login-form p-5 bg-white">
           <h2 className="text-center mb-4 fw-bold mt-3">Đăng nhập</h2>
-          <div className="border-top border-danger m-4" style={{ borderWidth: "4px"}}></div>
+          <div
+            className="border-top border-danger m-4"
+            style={{ borderWidth: "4px" }}
+          ></div>
           <h5 className="text-center">Explore the World!</h5>
           <form onSubmit={handleSubmit} className="mt-2 mx-4 px-1">
             <div className="mb-3 mt-3">
-                <label htmlFor="username" className="form-label fw-bold mt-3">Tên đăng nhập</label>
-                <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                />
+              <label htmlFor="username" className="form-label fw-bold mt-3">
+                Tên đăng nhập
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
             </div>
             <div className="mb-3">
-              <label htmlFor="password" className="form-label fw-bold">Mật khẩu</label>
+              <label htmlFor="password" className="form-label fw-bold">
+                Mật khẩu
+              </label>
               <input
                 type="password"
                 className="form-control"
@@ -59,18 +87,30 @@ const Login = () => {
                 required
               />
             </div>
-            
-            <button type="submit" className="btn btn-danger w-100 fw-bold" disabled={loading}>
-                {loading ? 
-                (<>
-                <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-                Đang xử lý...
+
+            <button
+              type="submit"
+              className="btn btn-danger w-100 fw-bold"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Đang xử lý...
                 </>
-                ) : ("Đăng nhập")}
+              ) : (
+                "Đăng nhập"
+              )}
             </button>
           </form>
           <p className="text-center mt-3">
-            <a href="/signup" className="text-decoration-none text-black">Bạn chưa có tài khoản? Đăng ký ngay</a>
+            <a href="/signup" className="text-decoration-none text-black">
+              Bạn chưa có tài khoản? Đăng ký ngay
+            </a>
           </p>
         </div>
 

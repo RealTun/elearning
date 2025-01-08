@@ -1,0 +1,13 @@
+[33m42fea5b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdung[m[33m, [m[1;31morigin/dung[m[33m)[m HEAD@{0}: reset: moving to HEAD
+[33m42fea5b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdung[m[33m, [m[1;31morigin/dung[m[33m)[m HEAD@{1}: pull origin main: updating HEAD
+[33m42fea5b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdung[m[33m, [m[1;31morigin/dung[m[33m)[m HEAD@{2}: pull origin main: Merge made by the 'ort' strategy.
+[33m2721d81[m HEAD@{3}: commit (merge): Merge Le
+[33m49cd157[m HEAD@{4}: commit: Course of Doucument
+[33m2b74944[m HEAD@{5}: commit (merge): Merge branch 'thuong' of https://github.com/RealTun/elearning into dung
+[33m539459b[m HEAD@{6}: commit: Button next course carousel
+[33m91daa84[m HEAD@{7}: commit (merge): Update structure Project Front End
+[33m76dd911[m HEAD@{8}: pull origin le: Fast-forward
+[33m356bb22[m HEAD@{9}: commit: Init Sub Folder
+[33mc40085f[m HEAD@{10}: commit: Init Project FrontEnd
+[33m22b1bdc[m[33m ([m[1;32mmain[m[33m)[m HEAD@{11}: checkout: moving from main to dung
+[33m22b1bdc[m[33m ([m[1;32mmain[m[33m)[m HEAD@{12}: clone: from https://github.com/RealTun/elearning.git
