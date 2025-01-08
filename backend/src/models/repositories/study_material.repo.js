@@ -26,7 +26,7 @@ const getAllStudyMaterialsPaging = async (skip, limit) => {
     try {
         const results = await StudyMaterial.find()
         .populate('list_video', '_id title url embed_code')
-        .sort({ createdAt: -1 }) // Sắp xếp giảm dần theo `createdAt`
+        .sort({ created_at: 1 })
         .skip(skip)
         .limit(limit)
         .exec();
