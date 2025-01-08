@@ -1,96 +1,5 @@
-// import React from "react";
-// import "./Course.css";
-// import Header from "../../layouts/Header/Header";
-// import SearchItem from "../../components/SearchItem/SearchItem";
-
-// import Card from "../../components/Card/CardCourse";
-// import img from "../../assets/images/python.jpg"
-
-// const Course = () => {
-//   return (
-//     <div className="course">
-//       <Header
-//         username="HuongPTA"
-//         title="Khóa học"
-//         middleContent={
-//           <div className="d-flex justify-content-between align-items-center">
-//             <SearchItem />
-//             {/* <FilterItem /> */}
-//           </div>
-//         }
-//       >
-//       </Header>
-
-//       <h2>Đề xuất</h2>
-//       <div className="tab-content">
-//         <div className="row">
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python" />
-//           </div>
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python" />
-//           </div>
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python" />
-//           </div>
-
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python" />
-//           </div>
-
-//         </div>
-
-//       </div>
-
-//       <h2 className="mt-3 ">Khóa học</h2>
-//       <div className="tab-content">
-//         <div className="row">
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python"
-//               lessons="12"
-//             />
-//           </div>
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python"
-//               lessons="12" />
-
-//           </div>
-//           <div className="col-md-3 mt-3">
-//             <Card
-//               image={img}
-//               title="Lập trình python"
-//               lessons="12" />
-//           </div>
-//           <div className="col-md-3 mt-3">
-//             <Card image={img}
-//               title="Lập trình python" />
-//           </div>
-
-//         </div>
-
-//       </div>
-
-//       <h2 className="mt-3">Lộ trình khóa học </h2>
-//       {/* Nội dung khác */}
-//     </div>
-//   );
-// };
-
-// export default Course;
-
 import React from "react";
+import { useState, useEffect } from "react";
 import Slider from "react-slick"; // Import React Slick
 import "slick-carousel/slick/slick.css"; // Import css files
 import "slick-carousel/slick/slick-theme.css"; // Import css files
@@ -100,6 +9,9 @@ import SearchItem from "../../components/SearchItem/SearchItem";
 import CardCourse from "../../components/Card/CardCourse";
 import img from "../../assets/images/python.jpg";
 import "./Course.css";
+
+import API_URL from "../../config/API_URL";
+import axios from "axios";
 
 // Tùy chỉnh nút mũi tên
 const CustomNextArrow = ({ onClick }) => {
@@ -135,7 +47,7 @@ const CustomPrevArrow = ({ onClick }) => {
 const Course = () => {
   // Cấu hình Slider
   const settings = {
-    dots: true,
+    dots: false,
     infinite: false,
     speed: 500,
     slidesToShow: 4, // Số lượng card hiển thị mỗi lần
@@ -168,6 +80,42 @@ const Course = () => {
       },
     ],
   };
+
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/studyMaterials?page=1&limit=27`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+        const data = response.data.data;
+
+        console.log(data);
+
+        setCourses(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  if (loading) return <div>Đang tải dữ liệu...</div>;
+  if (error) return <div>Lỗi: {error}</div>;
+
   return (
     <div className="course">
       <Header
@@ -193,13 +141,14 @@ const Course = () => {
 
         <h2 className="mt-3 ">Khóa học</h2>
         <Slider {...settings}>
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" lessons="12" />
-          <CardCourse image={img} title="Lập trình python" />
+          {courses.map((course, index) => (
+              <CardCourse
+                key={index}
+                image={img}
+                title={course.playlist_title}
+                lessons={course.list_video.length}
+              />
+          ))}
         </Slider>
 
         <h2 className="mt-3">Lộ trình khóa học</h2>
