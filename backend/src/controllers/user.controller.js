@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const { findUserByUid, isExistedUser, createUser, updateUser, updateRoleUser } = require('../models/repositories/user.repo');
 const { generateToken } = require('../services/token.service');
 const { getTokenTlu, getSummaryMark, getListMarkDetail, getCourseSubject } = require('./student.controller');
-const { parseDate, parseTimestampToDate, formatDate } = require('../utils');
+const { parseDate, parseTimestampToDate, formatDate, getInfoData, pickFieldObject } = require('../utils');
 
 const signup = async (req, res) => {
     try {
@@ -16,14 +16,14 @@ const signup = async (req, res) => {
         // Kiểm tra dữ liệu yêu cầu
         if (!username || !password) {
             return res.status(400).json({
-                message: 'Required fields: username, password, email, full_name',
+                message: 'Required fields: username, password',
             });
         }
 
         // kiểm tra ng dùng có tồn tại hay chưa
         const existingUser = await isExistedUser(username);
         if (existingUser) {
-            return res.status(400).json({
+            return res.status(409).json({
                 message: 'Username already exists',
             });
         }
@@ -56,7 +56,7 @@ const login = async (req, res) => {
 
         const userFound = await findUserByUid(username);
         if (!userFound) {
-            return res.status(400).json({
+            return res.status(404).json({
                 message: "User not found",
             });
         }
@@ -82,6 +82,30 @@ const login = async (req, res) => {
     }
 };
 
+const getCurrentUser = async (req, res) => {
+    try {
+        const userFound = await findUserByUid(req.user.username);
+        if (!userFound) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+
+        const fields = ['uid', 'role', 'class', 'date_of_birth', 'department', 'email', 'full_name', 'gender', 'gpa', 'major', 'list_mark', 'study_schedule'];
+
+        const data = pickFieldObject(fields, userFound);
+        return res.status(200).json({
+            message: 'Get current user success',
+            data: data,
+        });
+    }
+    catch (error) {
+        res.status(error.response?.status || 500).json({
+            message: error.message,
+        });
+    }
+}
+
 const syncDataStudent = async (req, res) => {
     try {
 
@@ -99,6 +123,12 @@ const syncDataStudent = async (req, res) => {
         const summaryMark = await getSummaryMark(tokenTlu);
         const listMarkDetail = await getListMarkDetail(tokenTlu);
         const courseSubject = await getCourseSubject(tokenTlu);
+
+        if(summaryMark === null || listMarkDetail === null || courseSubject === null){
+            return res.status(503).json({
+                message: 'Error get info student from TLU'
+            });
+        }
 
         const updateData = {
             "uid": summaryMark.uid,
@@ -137,6 +167,13 @@ const syncDataStudent = async (req, res) => {
 const updateRole = async (req, res) => {
     try {
         const userUpdated = await updateRoleUser(req.user.username);
+
+        if (!userUpdated) {
+            return res.status(400).json({
+                message: 'Error update role'
+            });
+        }
+
         return res.status(200).json({
             message: 'Update role success',
             data: userUpdated,
@@ -152,6 +189,7 @@ const updateRole = async (req, res) => {
 module.exports = {
     signup,
     login,
+    getCurrentUser,
     syncDataStudent,
     updateRole
 }

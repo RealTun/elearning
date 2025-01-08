@@ -1,7 +1,6 @@
 'use strict'
 
 const jwt = require('jsonwebtoken');
-const { findUserByUid } = require('../models/repositories/user.repo');
 require('dotenv').config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
