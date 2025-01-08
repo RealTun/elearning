@@ -16,17 +16,24 @@ import Schedule from "./Pages/Schedule/Schedule";
 import Login from "./Pages/Login/Login";
 import Setting from "./Pages/Setting/Setting";
 import Chatbot from "./Pages/Chatbot/Chatbot";
+import Signup from "./Pages/Signup/Signup";
 
 const App = () => {
   const location = useLocation();
-  const isLoginRoute = location.pathname === "/login";
+
+  // Xác định nếu đang ở route không cần SideBar, test 
+  const noSideBarRoutes = ["/login", "/signup"];
+  const hideSideBar = noSideBarRoutes.includes(location.pathname);
+
   return (
     <div className="container-wrapper">
-      {!isLoginRoute && <SideBar />}
+    {/* {!isLoginRoute && <SideBar />} */}
+    {!hideSideBar && <SideBar />}
 
       <div className="main">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/course" element={<Course />} />
           <Route path="/document" element={<Document />} />

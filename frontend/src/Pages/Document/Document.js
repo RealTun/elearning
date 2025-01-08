@@ -87,7 +87,7 @@ const Document = () => {
       ></Header>
       {/* Nội dung khác */}
 
-      <div className="container p-3">
+      <div className="wrapper p-3">
         <div className="row align-items-center">
           <div className="col-md-9">
             <h2 className="mt-3">Đề xuất</h2>

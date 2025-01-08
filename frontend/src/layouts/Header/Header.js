@@ -1,8 +1,9 @@
 import React, { Children } from "react";
+import "./Header.css"
 
 const Header = ({ username,title,middleContent }) => {
   return (
-    <div className="container-fluid p-3 bg-white shadow-sm">
+    <div className="header container-fluid p-3 bg-white shadow-sm">
       <div className="row align-items-center">
         {/* Phần "Welcome Back" */}
         <div className="col-md-3 text-start">
