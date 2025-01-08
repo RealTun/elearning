@@ -1,6 +1,12 @@
 import "./App.css";
 import SideBar from "./layouts/SideBar/SideBar";
-import { BrowserRouter as Router, Routes, Route, Link ,useLocation} from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  useLocation,
+} from "react-router-dom";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Course from "./Pages/Course/Course";
 import Document from "./Pages/Document/Document";
@@ -16,11 +22,9 @@ const App = () => {
   const isLoginRoute = location.pathname === "/login";
   return (
     <div className="container-wrapper">
-    {!isLoginRoute && <SideBar />}
+      {!isLoginRoute && <SideBar />}
 
-      <div className="main">  
-        {/* Các Routes */}
-        {/* <Headers></Headers> */}
+      <div className="main">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />

@@ -6,14 +6,6 @@ body {
   font-family: Arial, sans-serif;
 }
 
-/* Main container */
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 /* Login container */
 .login-container {
   display: flex;
