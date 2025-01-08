@@ -17,6 +17,7 @@ import Login from "./Pages/Login/Login";
 import Setting from "./Pages/Setting/Setting";
 import Chatbot from "./Pages/Chatbot/Chatbot";
 import Signup from "./Pages/Signup/Signup";
+import ShowCourse from "./Pages/Course/ShowCourse";
 
 const App = () => {
   const location = useLocation();
@@ -35,7 +36,8 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/course" element={<Course />} />
+          {/* <Route path="/course" element={<Course />} /> */}
+          <Route path="/course" element={<ShowCourse />} />
           <Route path="/document" element={<Document />} />
           <Route path="/findwork" element={<FindWork />} />
           <Route path="/profile" element={<Profile />} />

@@ -4,7 +4,11 @@ import Header from "../../layouts/Header/Header";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([
-    { text: "Tôi có thể giúp gì cho bạn?", sender: "Bot", time: new Date().toLocaleTimeString() },
+    {
+      text: "Tôi có thể giúp gì cho bạn?",
+      sender: "Bot",
+      time: new Date().toLocaleTimeString(),
+    },
   ]);
   const [input, setInput] = useState("");
   const messageEndRef = useRef(null);
@@ -69,15 +73,27 @@ const ChatApp = () => {
   );
 };
 
-const ChatMain = ({ messages, input, setInput, sendMessage, messageEndRef }) => (
+const ChatMain = ({
+  messages,
+  input,
+  setInput,
+  sendMessage,
+  messageEndRef,
+}) => (
   <div className="chat-main">
     <div className="chat-messages">
       {messages.map((msg, index) => (
         <div
           key={index}
-          className={`chat-message ${msg.sender === "You" ? "outgoing" : "incoming"}`}
+          className={`chat-message ${
+            msg.sender === "You" ? "outgoing" : "incoming"
+          }`}
         >
-          <div className="chat-bubble">
+          <div
+            className={`chat-bubble ${
+              msg.sender === "You" ? "outgoing" : "incoming"
+            }`}
+          >
             <p>{msg.text}</p>
             <span className="chat-time">{msg.time}</span>
           </div>

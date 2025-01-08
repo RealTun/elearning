@@ -3,7 +3,7 @@ import "./CardCourse.css";
 
 const CardCourse = ({ image, title, level, lessons }) => {
   return (
-    <div className="card text-center rounded-4 border-1">
+    <div className="card-course card text-center rounded-4 border-1">
       <div className="card-header p-0 rounded-top-4 overflow-hidden">
         {/* Hiển thị hình ảnh */}
         <img src={image} alt={title} className="img-fluid card-image" />
