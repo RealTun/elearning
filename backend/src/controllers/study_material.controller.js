@@ -115,8 +115,8 @@ const findStudyMaterials = async (req, res) => {
 };
 
 const getAllStudyMaterials = async (req, res) => {
-    const pageRq = parseInt(req.query.page);
-    const limitRq = parseInt(req.query.limit);
+    const pageRq = parseInt(req.query.page, 0);
+    const limitRq = parseInt(req.query.limit, 0);
 
     if (pageRq <= 0) {
         return res.status(400).json({
@@ -136,11 +136,6 @@ const getAllStudyMaterials = async (req, res) => {
 
     try {
         const results = await getAllStudyMaterialsPaging(skip, limit);
-        // const data = results.map(item => ({
-        //     _id: item._id,
-        //     playlist_title: item.playlist_title,
-        //     count_video: item.list_video.length,
-        // }));
 
         res.status(200).json({
             message: 'Get study materials successful',
