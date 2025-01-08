@@ -50,7 +50,9 @@ const updateUser = async (username, updateData) => {
             return null;
         }
 
-        updatedUser.isSynced = true;
+        if(updatedUser['gpa']){
+            updatedUser.isSynced = true;
+        }
         updatedUser.save();
 
         return updatedUser;

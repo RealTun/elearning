@@ -186,10 +186,51 @@ const updateRole = async (req, res) => {
     }
 }
 
+const changePassword = async(req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const username = req.user.username;
+
+        const userFound = await findUserByUid(username);
+        if (!userFound) {
+            return res.status(404).json({
+                message: "User not found",
+            });
+        }
+
+        const isValid = bcrypt.compareSync(oldPassword, userFound.password);
+        if (!isValid) {
+            return res.status(400).json({
+                message: "Old password not correct",
+            });
+        }
+
+        const newPasswordHash = await bcrypt.hash(newPassword, 10);
+        const userUpdated = await updateUser(req.user.username, {'password': newPasswordHash});
+
+        if (!userUpdated) {
+            return res.status(400).json({
+                message: 'Error change password user'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Update password user success',
+            data: [],
+        });
+    }
+    catch (error) {
+        res.status(error.response?.status || 500).json({
+            message: error.message,
+        });
+    }
+}
+
 module.exports = {
     signup,
     login,
     getCurrentUser,
     syncDataStudent,
-    updateRole
+    updateRole,
+    changePassword
 }

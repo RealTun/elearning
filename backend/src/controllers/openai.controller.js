@@ -1,50 +1,30 @@
 const { OpenAI } = require("openai");
 const { findUserByUid } = require("../models/repositories/user.repo");
 const { findStudyMaterialsByKeyword } = require("../models/repositories/study_material.repo");
+const { saveChat, getChatHistoryByUserId, deleteChatHistoryByUserId } = require("../models/repositories/chatHistory.repo");
+const { convertToObjectIdMongodb } = require("../utils");
 require('dotenv').config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const chatCompletion = async (req, res) => {
-  try {
-    // example body request
-    // {
-    //   "prompt": "hãy khen tôi đẹp zai"
-    // }
-    const prompt = req.body.prompt;
+const getConentAI = async (prompt) => {
+  const response = await openai.chat.completions.create({
+    messages: [
+      {
+        role: "system", content: 'You are a helpful assistant.'
+      },
+      { role: "user", content: prompt }
+    ],
+    model: "gpt-3.5-turbo",
+    max_tokens: 1080,
+    temperature: 0.8,
+  });
 
-    if(prompt === ''){
-      return res.status(400).json({
-        message: 'prompt can not be blank',
-      });
-    }
-
-    const response = await openai.chat.completions.create({
-      messages: [
-        {
-          role: "system", content: 'You are a helpful assistant.'
-        },
-        { role: "user", content: prompt }
-      ],
-      model: "gpt-3.5-turbo",
-      max_tokens: 1080,
-      temperature: 0.8,
-    });
-
-    let content = response.choices[0].message.content;
-
-    res.status(200).json({
-      message: 'Get content success',
-      data: content,
-    });
-  } catch (error) {
-    res.status(error.response?.status || 500).json({
-      message: error.message,
-    });
-  }
-};
+  let content = response.choices[0].message.content;
+  return content;
+}
 
 const suggest = async (req, res) => {
   try {
@@ -79,19 +59,8 @@ const suggest = async (req, res) => {
     ];
 
     // const prompt = `Hãy cho tôi lịch tự học các video trong ${listVid} có cả thứ trong tuần, giờ học, hãy chỉ trả lời cho tôi ra dạng response như mẫu ${exampleResponse} để tôi có thể lấy dùng cho frontend, không trả lời thêm các từ khác`;
-    // const response = await openai.chat.completions.create({
-    //   messages: [
-    //     {
-    //       role: "system", content: 'You are a helpful assistant.'
-    //     },
-    //     { role: "user", content: prompt }
-    //   ],
-    //   model: "gpt-3.5-turbo",
-    //   max_tokens: 1080,
-    //   temperature: 0.8,
-    // });
 
-    // let content = response.choices[0].message.content;
+    // let content = await getConentAI(prompt);;
 
     res.status(200).json({
       message: 'Get content success',
@@ -105,7 +74,80 @@ const suggest = async (req, res) => {
   }
 };
 
+const chatWithAI = async (req, res) => {
+  const { message } = req.body;
+  const userId = convertToObjectIdMongodb(req.user._id);
+
+  try {
+    if (message === '') {
+      return res.status(400).json({
+        message: 'message can not be blank',
+      });
+    }
+
+    const aiResponse = await getConentAI(message);
+
+    const isSavedChat = await saveChat(userId, message, aiResponse);
+
+    if(!isSavedChat){
+      res.status(400).json({
+        message: 'Try again',
+      });
+    }
+
+    // Trả kết quả cho người dùng
+    res.status(200).json({
+      message: 'Chat successful',
+      data: aiResponse,
+    });
+  } catch (error) {
+    res.status(error.response?.status || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getChatHistory = async (req, res) => {
+  const userId = convertToObjectIdMongodb(req.user._id);
+
+  try {
+    const chatHistory = await getChatHistoryByUserId(userId);
+    if (!chatHistory) {
+      return res.status(404).json({
+        message: "No chat history found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Get chat history success",
+      data: chatHistory,
+    });
+  } catch (error) {
+    res.status(error.response?.status || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+const clearChatHistory = async (req, res) => {
+  const userId = convertToObjectIdMongodb(req.user._id);
+
+  try {
+    await deleteChatHistoryByUserId(userId);
+    res.status(200).json({
+      message: 'Chat history cleared successfully',
+    });
+  } catch (error) {
+    res.status(error.response?.status || 500).json({
+      message: error.message,
+    });
+  }
+};
+
+
 module.exports = {
-  chatCompletion,
-  suggest
+  suggest,
+  chatWithAI,
+  getChatHistory,
+  clearChatHistory
 };
