@@ -9,18 +9,18 @@ import img from "../../assets/images/python.jpg"
 const Course = () => {
   return (
     <div className="course">
-      <Header 
-        username="HuongPTA" 
+      <Header
+        username="HuongPTA"
         title="Khóa học"
         middleContent={
           <div className="d-flex justify-content-between align-items-center">
             <SearchItem />
             {/* <FilterItem /> */}
           </div>
-        }     
+        }
       >
       </Header>
-
+      
       <h2>Đề xuất</h2>
       <div className="tab-content">
         <div className="row">
@@ -39,7 +39,7 @@ const Course = () => {
               image={img}
               title="Lập trình python" />
           </div>
-          
+
           <div className="col-md-3 mt-3">
             <Card
               image={img}
