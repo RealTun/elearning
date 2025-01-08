@@ -205,48 +205,6 @@ const Course = () => {
         <h2 className="mt-3">Lộ trình khóa học</h2>
         {/* Nội dung khác */}
       </div>
-
-      <div className="wrapper" style={{ padding: "30px" }}>
-        <h2>Đề xuất</h2>
-        <div className="tab-content">
-          <div className="row">
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" />
-            </div>
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" />
-            </div>
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" />
-            </div>
-
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" />
-            </div>
-          </div>
-        </div>
-
-        <h2 className="mt-3 ">Khóa học</h2>
-        <div className="tab-content">
-          <div className="row">
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" lessons="12" />
-            </div>
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" lessons="12" />
-            </div>
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" lessons="12" />
-            </div>
-            <div className="col-md-3 mt-3 d-flex justify-content-center">
-              <CardCourse image={img} title="Lập trình python" />
-            </div>
-          </div>
-        </div>
-
-        <h2 className="mt-3">Lộ trình khóa học </h2>
-        {/* Nội dung khác */}
-      </div>
     </div>
   );
 };

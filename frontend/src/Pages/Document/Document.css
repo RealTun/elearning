@@ -1,23 +1,54 @@
-.create-plan-button {
-    background-color: #ff6b6b; /* Màu đỏ hồng */
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-    margin-left: 30px;
-    margin-top: 20px;
+.btn-createPlan {
+  background-color: #ff6b6b; /* Màu đỏ hồng */
+  color: white;
+  cursor: pointer;
 }
 
-.create-plan-button:hover {
-    background-color: #ff5252;
-    transform: scale(1.05);
+.btn-createPlan:hover {
+  background-color: #ff5252;
+  color: white;
+  transform: scale(1.05);
 }
 
-.create-plan-button:active {
-    transform: scale(0.95);
+
+.document {
+  .slick-slider {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .slick-slide {
+    padding: 0 15px; /* Khoảng cách giữa các slide */
+  }
+
+  .slick-slide:first-child {
+    padding-left: 0; /* Loại bỏ khoảng cách bên trái cho slide đầu tiên */
+  }
+
+  .slick-slide:last-child {
+    padding-right: 0; /* Loại bỏ khoảng cách bên phải cho slide cuối cùng */
+  }
+
+  .slick-list {
+    margin: 0 -15px;
+  }
+
+  .slick-track {
+    display: flex;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .card {
+    margin: 0 15px;
+  }
+
+  .carousel-control-next {
+    width: 10%;
+    background: linear-gradient(to left, #333, #0000);
+  }
+  .carousel-control-prev {
+    width: 10%;
+    background: linear-gradient(to right, #333, #0000);
+  }
 }
