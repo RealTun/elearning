@@ -1,0 +1,23 @@
+.create-plan-button {
+    background-color: #ff6b6b; /* Màu đỏ hồng */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    margin-left: 30px;
+    margin-top: 20px;
+}
+
+.create-plan-button:hover {
+    background-color: #ff5252;
+    transform: scale(1.05);
+}
+
+.create-plan-button:active {
+    transform: scale(0.95);
+}
