@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // import axios from "axios";
 import "./Login.css";
 
@@ -15,19 +17,19 @@ const Login = () => {
     setIsLoading(true); // Bắt đầu loading
   
     setTimeout(() => {
-      // Giả lập xử lý đăng nhập
-      if (username === "2151163702" && password === "1234") {
-        navigate("/dashboard");
+      if (username === "admin" && password === "admin") {
+        toast.success("Đăng nhập thành công!", { autoClose: 2000 });
+        setTimeout(() => navigate("/dashboard"), 2000); // Chuyển hướng sau 2 giây
       } else {
-        alert("Mã sinh viên hoặc mật khẩu không đúng!");
+        toast.error("Tên đăng nhập hoặc mật khẩu không đúng!", { autoClose: 1500 });
       }
       setIsLoading(false); // Kết thúc loading
-    }, 2000); // Giả lập 2 giây xử lý
+    }, 2000); // Giả lập xử lý trong 2 giây
   };
 
-  
   return (
     <div className="container d-flex justify-content-center align-items-center vh-100">
+      <ToastContainer /> {/* Hiển thị Toast */}
       <div className="login-container shadow-lg">
         {/* Form đăng nhập */}
         <div className="login-form p-5 bg-white">
@@ -36,7 +38,7 @@ const Login = () => {
           <h5 className="text-center">Explore the World!</h5>
           <form onSubmit={handleSubmit} className="mt-2 mx-4 px-1">
             <div className="mb-3 mt-3">
-                <label htmlFor="username" className="form-label fw-bold mt-3">Mã sinh viên</label>
+                <label htmlFor="username" className="form-label fw-bold mt-3">Tên đăng nhập</label>
                 <input
                     type="text"
                     className="form-control"
@@ -68,7 +70,7 @@ const Login = () => {
             </button>
           </form>
           <p className="text-center mt-3">
-            <a href="/forgot-password" className="text-decoration-none text-black">Quên mật khẩu?</a>
+            <a href="/signup" className="text-decoration-none text-black">Bạn chưa có tài khoản? Đăng ký ngay</a>
           </p>
         </div>
 

@@ -12,7 +12,6 @@ const SearchItem = () =>{
             <input
                 type="text"
                 className="form-control border-0"
-                // placeholder={placeholder}
                 placeholder="Tìm kiếm..."
                 style={{
                 height: "40px",

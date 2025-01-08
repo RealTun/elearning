@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import './CardDashboard.css'
 
-const InfoCard = ({ icon, title, value, bgColor = "bg-light" }) => {
+const InfoCard = ({ icon, title, value, bgColor = "bg-light"}) => {
   return (
-    <div className={`info-card d-flex align-items-center justify-content-between p-3 rounded ${bgColor}`}>
+    <div className={`info-card d-flex align-items-center p-3 mx-2 rounded-4 ${bgColor}`}>
       <div className="icon-container me-3">{icon}</div>
       <div>
-        <p className="info-title mb-1 text-muted">{title}</p>
-        <h5 className="info-value fw-bold mb-0">{value}</h5>
+        <p className="info-title mb-1 text-white fs-6">{title}</p>
+        <h5 className="info-value fw-bold mb-0 text-white fs-3">{value}</h5>
       </div>
     </div>
   );

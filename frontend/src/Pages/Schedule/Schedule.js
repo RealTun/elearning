@@ -1,7 +1,6 @@
 import React from "react";
 import "./Schedule.css";
 import Header from "../../layouts/Header/Header";
-import SearchItem from "../../components/SearchItem/SearchItem";
 import TableSchedule from "../../components/Table/TableSchedule";
 
 const Schedule = () => {
@@ -16,11 +15,16 @@ const Schedule = () => {
       >
       </Header>
       {/* Nội dung khác */}
-      <div className="m-4">
-        <div className="d-flex mb-3">
-          <h5>Tuần</h5>
-          <input className="form-control-sm border-black"></input>
-        </div>
+      <div className="main-schedule container-fluid p-4">
+      <div className="d-flex align-items-center mb-3 mx-3">
+        <h5 className="me-2">Tuần</h5>
+        <input 
+          className="form-control form-control-sm custom-input" 
+          type="text" 
+          placeholder="Chọn tuần..." 
+          readOnly
+        />
+      </div>
         <TableSchedule/>
       </div>
     </div>

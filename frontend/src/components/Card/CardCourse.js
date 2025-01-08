@@ -12,8 +12,6 @@ import "./CardCourse.css";
 // export default CardCourse;
 
 
-
-
 const Card = ({ image, title, level, lessons }) => {
   return (
     <div className="card shadow-lg text-center rounded-4 border-0">
