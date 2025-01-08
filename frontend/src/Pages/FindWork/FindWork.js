@@ -12,7 +12,7 @@ const FindWork = () => {
       <Header 
         username="HuongPTA" 
         title="Tìm việc"
-        middleContent = {<SearchItem/>}      
+        // middleContent = {<SearchItem/>}      
         >
       </Header>
       {/* Nội dung khác */}
