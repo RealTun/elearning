@@ -100,6 +100,8 @@ const Course = () => {
         );
         const data = response.data.data;
         setCourses(data);
+        console.log(data[0]._id);
+        
       } catch (err) {
         setError(err.message);
       } finally {
@@ -139,11 +141,13 @@ const Course = () => {
         <h2 className="mt-3 ">Khóa học</h2>
         <Slider {...settings}>
           {courses.map((course, index) => (
+            
               <CardCourse
                 key={index}
                 image={img}
                 title={course.playlist_title}
                 lessons={course.list_video.length}
+                playlistId={course._id} // Truyền ID để sử dụng trong "Xem chi tiết"
               />
           ))}
         </Slider>

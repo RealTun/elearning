@@ -13,6 +13,7 @@ import Login from "./Pages/Login/Login";
 import Signup from "./Pages/Signup/Signup";
 import Setting from "./Pages/Setting/Setting";
 import Chatbot from "./Pages/Chatbot/Chatbot";
+import Course from "./Pages/Course/Course";
 
 const App = () => {
   const location = useLocation();
@@ -53,13 +54,16 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/course" element={<ShowCourse />} />
+          <Route path="/course" element={<Course />} />
+          {/* <Route path="/course" element={<ShowCourse />} /> */}
           <Route path="/document" element={<Document />} />
           <Route path="/findwork" element={<FindWork />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/setting" element={<Setting />} />
+          <Route path="/studyMaterials/:id" element={<ShowCourse />} />
+
         </Routes>
       </div>
     </div>

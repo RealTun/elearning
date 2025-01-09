@@ -12,7 +12,6 @@ const Login = () => {
   const [loading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  //test login
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true); // Bắt đầu loading
@@ -27,10 +26,20 @@ const Login = () => {
         toast.success("Đăng nhập thành công!", { autoClose: 2000 });
         const token = response.data.data; // Token từ API
         const expiredTime = new Date().getTime() + 3 * 60 * 60 * 1000; // Thời điểm hết hạn: 3 giờ (ms)
-
         // Lưu token và expiredTime vào localStorage
         localStorage.setItem("token", token);
         localStorage.setItem("expiredTime", expiredTime);
+        try {
+          // Lấy thông tin người dùng từ API
+          const userResponse = await axios.get(`${API_URL}/user`, {
+            headers: {
+              Authorization: token,
+            },
+          });
+          const user = userResponse.data.data;
+          localStorage.setItem("user", JSON.stringify(user));
+        } catch (error) {}
+
         navigate("/dashboard");
       }
     } catch (error) {

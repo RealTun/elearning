@@ -49,7 +49,12 @@ const ChatApp = () => {
     fetchChatHistory();
   }, []);
 
-  // Cuộn xuống cuối khi có tin nhắn mới
+  // Cuộn xuống cuối khi có tin nhắn mới hoặc khi load lịch sử chat
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Cuộn xuống cuối
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };

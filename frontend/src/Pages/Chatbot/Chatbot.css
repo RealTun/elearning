@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: calc(100vh - 70px); /* Trừ đi chiều cao của Header */
+  height: calc(100vh - 80px); /* Trừ đi chiều cao của Header */
   max-width: 800px;
   margin: 0 auto;
   background-color: #f9f9f9;
@@ -13,19 +13,20 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Phần tin nhắn */
+/* Phần chính */
 .chat-main {
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
+/* Phần tin nhắn */
 .chat-messages {
-  flex: 1;
-  /* overflow-y: auto; */
+  flex: 1; /* Tự động mở rộng */
+  overflow-y: auto; /* Cuộn dọc khi nội dung vượt */
   overflow-x: hidden;
   padding: 16px;
-  max-height: 570px;
+  max-height: fit-content;
   background-color: #fff;
   scrollbar-width: thin; /* Firefox */
   scrollbar-color: #ccc transparent;
@@ -120,6 +121,7 @@
   padding: 12px 16px;
   background-color: #f7f7f7;
   border-top: 1px solid #ddd;
+  flex-shrink: 0; /* Không cho phép co lại */
 }
 
 .chat-input input {

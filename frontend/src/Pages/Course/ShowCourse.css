@@ -1,30 +1,40 @@
+/* Tổng quan */
 .show-course {
-  height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh; /* Chiều cao toàn bộ màn hình */
+  background-color: #f9f9f9;
 
+  /* Header */
   .header {
-    height: 50px;
+    background-color: #343a40;
+    color: #fff;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #444;
   }
 
+  /* Nội dung chính */
   .row {
-    flex-grow: 1;
+    flex: 1; /* Đẩy phần footer xuống dưới */
     display: flex;
-    overflow: hidden;
+    overflow: hidden; /* Đảm bảo nội dung không tràn */
   }
 
   .video-player-container {
+    flex: 3;
     display: flex;
     flex-direction: column;
+    background-color: #000;
   }
 
   .video-player {
-    flex: 1;
+    flex: 1; /* Đảm bảo khung video chiếm toàn bộ chiều cao còn lại */
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
-    position: relative;
   }
 
   .video-frame {
@@ -33,25 +43,40 @@
     border: none;
   }
 
+  /* Nội dung khóa học */
   .course-content {
     flex: 1;
-    overflow-y: auto;
+    max-height: calc(100vh - 110px); /* Chiều cao tối đa của phần nội dung */
+    background-color: #fff;
     border-left: 1px solid #ddd;
+    overflow-y: auto; /* Kích hoạt thanh cuộn nếu nội dung quá dài */
   }
 
   .course-content h6 {
-    position: sticky;
-    top: 0;
-    background: #f8f9fa;
-    z-index: 1;
-    padding: 10px 0;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
   }
 
+  .course-content .list-group-item {
+    padding: 10px 15px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+  }
+
+  .course-content .list-group-item.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  /* Footer */
   .footer-nav {
-    height: 50px;
-  }
-
-  .footer-nav button {
-    width: 150px;
+    background-color: #fff;
+    padding: 10px 15px;
+    border-top: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
   }
 }

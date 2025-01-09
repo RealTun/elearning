@@ -1,7 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./CardCourse.css";
 
-const CardCourse = ({ image, title, level, lessons }) => {
+const CardCourse = ({ image, title, level, lessons, playlistId }) => {
+  const navigate = useNavigate();
+
+  const handleViewDetail = () => {
+    navigate(`/studyMaterials/${playlistId}`); // Điều hướng với courseId
+  };
+
   return (
     <div className="card-course card text-center rounded-4 border-1">
       <div className="card-header p-0 rounded-top-4 overflow-hidden">
@@ -13,14 +20,15 @@ const CardCourse = ({ image, title, level, lessons }) => {
         <p className="card-subtitle text-muted">{level}</p>
         <p className="card-text text-secondary fw-semibold">{lessons} bài</p>
         {/* Nút bấm */}
-        <button className="btn btn-white btn-sm rounded-pill mt-2">
+        <button
+          className="btn btn-white btn-sm rounded-pill mt-2"
+          onClick={handleViewDetail}
+        >
           Xem chi tiết
         </button>
       </div>
     </div>
   );
 };
-
-
 
 export default CardCourse;

@@ -1,7 +1,8 @@
 import React, { Children } from "react";
-import "./Header.css"
+import "./Header.css";
 
-const Header = ({ username,title,middleContent }) => {
+const Header = ({ username, title, middleContent }) => {
+  const user = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="header container-fluid p-3 bg-white shadow-sm">
       <div className="row align-items-center">
@@ -11,9 +12,7 @@ const Header = ({ username,title,middleContent }) => {
         </div>
 
         {/* Thanh tìm kiếm */}
-        <div className="col-md-5">
-          {middleContent}
-        </div>
+        <div className="col-md-5">{middleContent}</div>
 
         {/* Thông báo và thông tin người dùng */}
         <div className="col-md-4 text-end d-flex align-items-center justify-content-end">
@@ -35,7 +34,9 @@ const Header = ({ username,title,middleContent }) => {
               className="rounded-circle me-2"
               style={{ width: "40px", height: "40px" }}
             />
-            <span className="fw-bold">{username}</span>
+            <span className="fw-bold">
+              {user.full_name ? user.full_name : user.username}
+            </span>
           </div>
         </div>
       </div>
