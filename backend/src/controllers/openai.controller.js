@@ -10,20 +10,25 @@ const openai = new OpenAI({
 });
 
 const getConentAI = async (prompt) => {
-  const response = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "system", content: 'You are a helpful assistant.'
-      },
-      { role: "user", content: prompt }
-    ],
-    model: "gpt-3.5-turbo",
-    max_tokens: 1080,
-    temperature: 0.8,
-  });
-
-  let content = response.choices[0].message.content;
-  return content;
+  try {
+    const response = await openai.chat.completions.create({
+      messages: [
+        {
+          role: "system", content: 'You are a helpful assistant.'
+        },
+        { role: "user", content: prompt }
+      ],
+      model: "gpt-3.5-turbo",
+      max_tokens: 1080,
+      temperature: 0.8,
+    });
+  
+    let content = response.choices[0].message.content;
+    return content;
+  }
+  catch(error){
+    return error.message;
+  }
 }
 
 const suggest = async (req, res) => {
@@ -75,7 +80,7 @@ const suggest = async (req, res) => {
 };
 
 const chatWithAI = async (req, res) => {
-  const { message } = req.body;
+  const message = req.body.message;
   const userId = convertToObjectIdMongodb(req.user._id);
 
   try {
@@ -85,8 +90,9 @@ const chatWithAI = async (req, res) => {
       });
     }
 
-    const aiResponse = await getConentAI(message);
+    console.log(message);
 
+    const aiResponse = await getConentAI(message);
     const isSavedChat = await saveChat(userId, message, aiResponse);
 
     if(!isSavedChat){
@@ -98,7 +104,7 @@ const chatWithAI = async (req, res) => {
     // Trả kết quả cho người dùng
     res.status(200).json({
       message: 'Chat successful',
-      data: aiResponse,
+      answer: aiResponse,
     });
   } catch (error) {
     res.status(error.response?.status || 500).json({

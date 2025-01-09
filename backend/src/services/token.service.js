@@ -10,9 +10,11 @@ const generateToken = async (user) => {
     const payload = {
         _id: user._id,
         username: user.username,
-        password: user.password,
+        // password: user.password,
         role: user.role
     };
+
+    // console.log(payload);
     
     const token = jwt.sign(payload, SECRET_KEY, {
         expiresIn: '3h',

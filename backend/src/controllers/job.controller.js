@@ -11,7 +11,7 @@ const searchJobs = async (req, res) => {
         const apiUrl = `https://ms.vietnamworks.com/job-search/v1.0/search`;
 
         const { keyword, limit, page } = req.body;
-        // console.log(keyword);
+        // console.log(req.body);
 
         const bodyToSendRequest = {
             "userId": 0,

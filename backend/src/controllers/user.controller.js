@@ -46,12 +46,6 @@ const signup = async (req, res) => {
 // login
 const login = async (req, res) => {
     try {
-        // Mẫu body request
-        // {
-        //     "username": "",
-        //     "password": "",
-        // }
-
         const { username, password } = req.body;
 
         const userFound = await findUserByUid(username);
@@ -93,10 +87,10 @@ const getCurrentUser = async (req, res) => {
 
         const fields = ['uid', 'role', 'class', 'date_of_birth', 'department', 'email', 'full_name', 'gender', 'gpa', 'major', 'list_mark', 'study_schedule'];
 
-        const data = pickFieldObject(fields, userFound);
+        // const data = pickFieldObject(fields, userFound);
         return res.status(200).json({
             message: 'Get current user success',
-            data: data,
+            data: userFound,
         });
     }
     catch (error) {
@@ -174,9 +168,12 @@ const updateRole = async (req, res) => {
             });
         }
 
+        const userFound = await findUserByUid(req.user.username);
+        const token = await generateToken(userFound);
+
         return res.status(200).json({
             message: 'Update role success',
-            data: userUpdated,
+            data: `Bearer ${token}`,
         });
     }
     catch (error) {
