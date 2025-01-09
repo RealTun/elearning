@@ -17,14 +17,21 @@ const authenticateToken = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        res.status(403).json({ message: 'Invalid or expired token' });
+        if (error instanceof jwt.TokenExpiredError) {
+            return res.status(401).json({ message: 'Token has expired' });
+        }
+        return res.status(403).json({ message: 'Invalid token' });
     }
 };
 
 const checkRole = (role) => (req, res, next) => {
     // console.log(req.user);
     if (req.user.role !== role) {
-      return res.status(403).send({message: 'Access denied'});
+      return res.status(403).send(
+        {
+            code: 1,
+            message: 'Access denied'
+        });
     }
     next();
   };

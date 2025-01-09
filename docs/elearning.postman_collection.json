@@ -1,0 +1,535 @@
+{
+	"info": {
+		"_postman_id": "abc910e0-47c7-4968-a729-6c5b2d4b62ce",
+		"name": "elearning",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30455603"
+	},
+	"item": [
+		{
+			"name": "importdata",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjU4MjQ0LCJleHAiOjE3MzYyNjkwNDR9.2SY3tesgBZ4_VzGnpgsd9lrJ2PxWLG5-O7lJ87SWSeM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/studyMaterial",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"studyMaterial"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"tuandodk\",\r\n    \"password\": \"tuan2106\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"tuandodk\",\r\n    \"password\": \"tuan2106\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getCurrentUser",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MTY4MDQwLCJleHAiOjE3MzYxNzg4NDB9.-cEeE-84Ry3Gw7bsTgLvXZOtcqK4MPc7FsRHY2XoI3Y",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "syncData",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJpYXQiOjE3MzU5OTY2MzEsImV4cCI6MTczNjAwMzgzMX0.SRf2_Gy1mzw5ycV5a6JOyibGxcTlGPG0mNY0wQSVk2w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"2151163738\",\r\n    \"password\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/student/syncData",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"student",
+						"syncData"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changeRole",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/student/role",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"student",
+						"role"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "changePassword",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"oldPassword\": \"tuan2003\",\r\n    \"newPassword\": \"tuan2106\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/user/changePassword",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"user",
+						"changePassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStudyMateriaById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjU4MjQ0LCJleHAiOjE3MzYyNjkwNDR9.2SY3tesgBZ4_VzGnpgsd9lrJ2PxWLG5-O7lJ87SWSeM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/studyMaterials/677d3930cc1ff5f52732b869",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"studyMaterials",
+						"677d3930cc1ff5f52732b869"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "studyMaterialsPaging",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/studyMaterials?page=1&limit=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"studyMaterials"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "studyMaterials/search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjQxMzY1LCJleHAiOjE3MzYyNTIxNjV9.CIeTiKQ2cJayOT21yAcvIHDd362IhdjprGaGP2a0U-I",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"keyword\": \"Xử lý ảnh\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/studyMaterials/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"studyMaterials",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDocumentById",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjU4MjQ0LCJleHAiOjE3MzYyNjkwNDR9.2SY3tesgBZ4_VzGnpgsd9lrJ2PxWLG5-O7lJ87SWSeM",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/documents/677d3930cc1ff5f52732b84d",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"documents",
+						"677d3930cc1ff5f52732b84d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "jobs/search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJpYXQiOjE3MzU5OTY2MzEsImV4cCI6MTczNjAwMzgzMX0.SRf2_Gy1mzw5ycV5a6JOyibGxcTlGPG0mNY0wQSVk2w",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"keyword\": \"backend\",\r\n    \"limit\": 3\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/jobs/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"jobs",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "predict/career",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjU4MjQ0LCJleHAiOjE3MzYyNjkwNDR9.2SY3tesgBZ4_VzGnpgsd9lrJ2PxWLG5-O7lJ87SWSeM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"age\": 22,\r\n    \"gpa\": 3.5,\r\n    \"domain\": \"Web Development\",\r\n    \"projects\": \"E-commerce Website\",\r\n    \"python\": 3,\r\n    \"sql\": 3,\r\n    \"java\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/predict/career",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"predict",
+						"career"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "openai/suggest",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MjQxMzY1LCJleHAiOjE3MzYyNTIxNjV9.CIeTiKQ2cJayOT21yAcvIHDd362IhdjprGaGP2a0U-Ia",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/openai/suggest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"openai",
+						"suggest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "openai/chat",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"message\": \"đưa ra lời khuyên khi tán gái cho tôi 1 cách ngắn gọn\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/api/openai/chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"openai",
+						"chat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getHistoryChat",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/openai/chat/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"openai",
+						"chat",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteHistoryChat",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NzczZjY4OTk4MGY3YTM4MzExOTg0ZTYiLCJ1c2VybmFtZSI6InR1YW5kb2RrIiwicGFzc3dvcmQiOiIkMmIkMTAkdE9nZjBxc0ZpcDZlL1lLMnJLam44LlBvMXZ5OHk2TkJXMHBXdmVrQUlHMFl1ODQ0Z2hmN3kiLCJyb2xlIjoicGFpZF91c2VyIiwiaWF0IjoxNzM2MzIzNzk5LCJleHAiOjE3MzYzMzQ1OTl9.ykPa1QmZvnwF7KkmCVCuQ_F-lN_Q2sQmndLRA1eNO4c",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3010/api/openai/chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"api",
+						"openai",
+						"chat"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

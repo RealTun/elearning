@@ -10,7 +10,7 @@ const generateToken = async (user) => {
     const payload = {
         _id: user._id,
         username: user.username,
-        password: user.password,
+        // password: user.password,
         role: user.role
     };
 

@@ -38,7 +38,7 @@ const saveChat = async (userId, question, answer) => {
 
         return true;
     } catch (error) {
-        return false;
+        throw error;
     }
 };
 
@@ -52,7 +52,7 @@ const getChatHistoryByUserId = async (userId) => {
     }
 
     // Sắp xếp các phần tử trong conversations theo timestamp giảm dần
-    chatHistory.conversations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    chatHistory.conversations.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 
     return chatHistory;
 };
