@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const SideBar = () => {
   const handleLogout = () => {
     // Xóa token trong localStorage
-    localStorage.removeItem("token");
+    localStorage.clear();
     // Điều hướng về trang login
     window.location.href = "/login";
   };
@@ -16,56 +16,64 @@ const SideBar = () => {
         <li className="mb-3">
           <Link
             to="/dashboard"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fas fa-chart-simple "></i> Tổng quan
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/course"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
-             <i className="fas fa-briefcase "></i> Khóa học
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
+            <i className="fas fa-briefcase "></i> Khóa học
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/document"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fas fa-book "></i>Tài liệu
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/schedule"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fa-solid fa-calendar-days "></i> Lịch học
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/findwork"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i className="fas fa-tasks "></i> Tìm việc
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/chatbot"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fas fa-comment "></i> Chatbot
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/profile"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fas fa-user "></i> Thông tin
           </Link>
         </li>
         <li className="mb-3">
           <Link
             to="/setting"
-            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1">
+            className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
+          >
             <i class="fas fa-gear"></i> Cài đặt
           </Link>
         </li>

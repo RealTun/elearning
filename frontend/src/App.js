@@ -1,4 +1,7 @@
 import "./App.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import SideBar from "./layouts/SideBar/SideBar";
 import {
   BrowserRouter as Router,
@@ -21,15 +24,31 @@ import ShowCourse from "./Pages/Course/ShowCourse";
 
 const App = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  // Xác định nếu đang ở route không cần SideBar, test 
   const noSideBarRoutes = ["/login", "/signup"];
   const hideSideBar = noSideBarRoutes.includes(location.pathname);
 
+  useEffect(() => {
+    if (isTokenExpired()) {
+      // Token đã hết hạn
+      localStorage.clear();
+      toast.warning("Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!");
+
+      navigate("/login"); // Chuyển hướng về trang đăng nhập
+    }
+  }, [location.pathname]); // Kiểm tra mỗi khi đường dẫn thay đổi
+
+  const isTokenExpired = () => {
+    const expiredTime = localStorage.getItem("expiredTime");
+    const now = new Date().getTime();
+    return expiredTime && now > Number(expiredTime);
+  };
+
   return (
     <div className="container-wrapper">
-    {/* {!isLoginRoute && <SideBar />} */}
-    {!hideSideBar && <SideBar />}
+      {/* {!isLoginRoute && <SideBar />} */}
+      {!hideSideBar && <SideBar />}
 
       <div className="main">
         <Routes>
