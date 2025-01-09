@@ -9,7 +9,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const getConentAI = async (prompt) => {
+const getContentAI = async (prompt) => {
   try {
     const response = await openai.chat.completions.create({
       messages: [
@@ -65,7 +65,7 @@ const suggest = async (req, res) => {
 
     // const prompt = `Hãy cho tôi lịch tự học các video trong ${listVid} có cả thứ trong tuần, giờ học, hãy chỉ trả lời cho tôi ra dạng response như mẫu ${exampleResponse} để tôi có thể lấy dùng cho frontend, không trả lời thêm các từ khác`;
 
-    // let content = await getConentAI(prompt);;
+    // let content = await getContentAI(prompt);;
 
     res.status(200).json({
       message: 'Get content success',
@@ -92,7 +92,7 @@ const chatWithAI = async (req, res) => {
 
     console.log(message);
 
-    const aiResponse = await getConentAI(message);
+    const aiResponse = await getContentAI(message);
     const isSavedChat = await saveChat(userId, message, aiResponse);
 
     if(!isSavedChat){
@@ -152,6 +152,7 @@ const clearChatHistory = async (req, res) => {
 
 
 module.exports = {
+  getContentAI,
   suggest,
   chatWithAI,
   getChatHistory,
