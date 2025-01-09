@@ -6,13 +6,12 @@ import API_URL from "../../config/API_URL.js";
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const messageEndRef = useRef(null);
   const [isTyping, setIsTyping] = useState(false);
-
+  const messageEndRef = useRef(null);
 
   // Lấy lịch sử chat
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     const fetchChatHistory = async () => {
       try {
         const response = await fetch(`${API_URL}/openai/chat/history`, {
@@ -50,12 +49,12 @@ const ChatApp = () => {
     fetchChatHistory();
   }, []);
 
-  // Scroll to the latest message
+  // Cuộn xuống cuối khi có tin nhắn mới
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Send message
+  // Gửi tin nhắn
   const sendMessage = async () => {
     if (input.trim()) {
       const newMessage = {
@@ -66,10 +65,9 @@ const ChatApp = () => {
       setMessages([...messages, newMessage]);
       setInput("");
 
-      setIsTyping(true);
+      setIsTyping(true); // Hiển thị trạng thái đang gõ
 
       try {
-        // Gửi yêu cầu đến API
         const token = localStorage.getItem("token");
         const response = await fetch(`${API_URL}/openai/chat`, {
           method: "POST",
@@ -83,9 +81,9 @@ const ChatApp = () => {
         if (response.ok) {
           const data = await response.json();
 
-          // Thêm phản hồi của bot vào danh sách
+          // Thêm phản hồi của bot
           const botReply = {
-            text: data.answer, // API trả về câu trả lời
+            text: data.answer,
             sender: "Bot",
             time: new Date().toLocaleTimeString(),
           };
@@ -108,8 +106,8 @@ const ChatApp = () => {
         };
         setMessages((prev) => [...prev, errorReply]);
       } finally {
-        setIsTyping(false);
-        scrollToBottom(); // Tự động cuộn xuống cuối khi có phản hồi
+        setIsTyping(false); // Ẩn trạng thái đang gõ
+        scrollToBottom(); // Cuộn xuống cuối
       }
     }
   };
@@ -124,6 +122,7 @@ const ChatApp = () => {
           setInput={setInput}
           sendMessage={sendMessage}
           messageEndRef={messageEndRef}
+          isTyping={isTyping} // Truyền trạng thái isTyping
         />
       </div>
     </div>
@@ -136,22 +135,28 @@ const ChatMain = ({
   setInput,
   sendMessage,
   messageEndRef,
-  isTyping
+  isTyping,
 }) => (
   <div className="chat-main">
     <div className="chat-messages">
       {messages.map((msg, index) => (
         <div
           key={index}
-          className={`chat-message mb-4 ${msg.sender === "You" ? "outgoing" : "incoming"}`}
+          className={`chat-message mb-4 ${
+            msg.sender === "You" ? "outgoing" : "incoming"
+          }`}
         >
-          <div className={`chat-bubble ${msg.sender === "You" ? "outgoing" : "incoming"}`}>
+          <div
+            className={`chat-bubble ${
+              msg.sender === "You" ? "outgoing" : "incoming"
+            }`}
+          >
             <p>{msg.text}</p>
             <span className="chat-time">{msg.time}</span>
           </div>
         </div>
       ))}
-      {isTyping && (
+      {isTyping && ( // Hiển thị trạng thái "Bot đang trả lời..."
         <div className="chat-message incoming">
           <div className="chat-bubble incoming">
             <div className="typing-indicator">
@@ -162,7 +167,6 @@ const ChatMain = ({
           </div>
         </div>
       )}
-
       <div ref={messageEndRef} /> {/* Auto-scroll target */}
     </div>
     <div className="chat-input">
@@ -170,9 +174,9 @@ const ChatMain = ({
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Type your message..."
+        placeholder="Nhập câu hỏi...."
       />
-      <button onClick={sendMessage}>Send</button>
+      <button onClick={sendMessage}>Gửi</button>
     </div>
   </div>
 );
