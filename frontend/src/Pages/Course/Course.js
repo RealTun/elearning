@@ -99,9 +99,6 @@ const Course = () => {
           }
         );
         const data = response.data.data;
-
-        console.log(data);
-
         setCourses(data);
       } catch (err) {
         setError(err.message);
