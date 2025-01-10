@@ -43,10 +43,14 @@ const FindWork = () => {
       if (response.ok) {
         return await response.json();
       } else {
-        console.error("Failed to fetch:", response.statusText);
+        if(response.status === 400){
+          toast.error("Vui lòng đồng bộ dữ liệu sinh viên trước khi thực hiện gợi ý!", {autoClose: 3000});
+        }
+        // console.error("Failed to fetch:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      // console.error("Error fetching data:", error);
+      toast.error("Đã có lỗi xảy ra!", {autoClose: 2500});
     } finally {
       setLoading(false);
     }
@@ -55,7 +59,8 @@ const FindWork = () => {
   // Gọi API tìm kiếm công việc
   const handleSearch = async () => {
     if (!searchTerm) {
-      alert("Không được để trống!");
+      // alert("Không được để trống!");
+      toast.warning("Không được để trống!", {autoClose: 2000});
       return;
     }
 

@@ -116,11 +116,14 @@ const Setting = () => {
         toast.success("Đồng bộ dữ liệu thành công!"); // Thông báo thành công
       } else if (response.status === 400) {
         toast.error("Dữ liệu đồng bộ không hợp lệ. Vui lòng kiểm tra lại!");
-      } else if (response.status === 503) {
-        toast.warning("Hệ thống đang bảo trì. Vui lòng thử lại sau!");
       }
     } catch (err) {
-      toast.error("Không thể kết nối đến server. Vui lòng thử lại sau!");
+      if (err.response.status === 503) {
+        toast.warning("Hệ thống đang bảo trì. Vui lòng thử lại sau!");
+      }
+      else {
+        toast.error("Không thể kết nối đến server. Vui lòng thử lại sau!");
+      }
     } finally {
       setLoading(false); // Kết thúc loading
     }
