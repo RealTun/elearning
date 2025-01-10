@@ -1,4 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
 import "./Dashboard.css";
 import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
@@ -7,12 +17,23 @@ import CourseProgressCard from "../../components/Card/CourseProgressCard.js";
 import CardSchedule from "../../components/Card/CardSchedule.js";
 import API_URL from "../../config/API_URL";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Loading from "../../components/Loading/Loading";
+
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Dashboard = () => {
   const [date, setDate] = useState("Thứ 4,8/1/2024");
   const [courseProgress, setCourseProgress] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchCourseProgress = async () => {
@@ -33,7 +54,11 @@ const Dashboard = () => {
           setCourseProgress(response.data.data); // Lưu tiến trình các khóa học
         }
       } catch (err) {
-        setError(err.message);
+        if (err.response && err.response.status === 404) {
+          toast.info("Bạn chưa tham gia khóa học nào");
+        } else {
+          toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau!");
+        }
       } finally {
         setLoading(false);
       }
@@ -42,16 +67,34 @@ const Dashboard = () => {
     fetchCourseProgress();
   }, []);
 
-  if (loading) {
-    return <div>Đang tải dữ liệu...</div>;
-  }
-
-  if (error) {
-    return <div>Lỗi: {error}</div>;
-  }
+  // Chuẩn bị dữ liệu biểu đồ
+  const chartData = {
+    labels: courseProgress.map((course) => course.course), // Tên khóa học
+    datasets: [
+      {
+        label: "Số bài đã học",
+        data: courseProgress.map((course) =>
+          parseInt(course.progress.split("/")[0])
+        ),
+        backgroundColor: "rgba(75, 192, 192, 0.6)", // Màu cột đã học
+        borderWidth: 1,
+      },
+      {
+        label: "Tổng số bài",
+        data: courseProgress.map((course) =>
+          parseInt(course.progress.split("/")[1])
+        ),
+        backgroundColor: "rgba(255, 99, 132, 0.6)", // Màu cột tổng
+        borderWidth: 1,
+      },
+    ],
+  };
 
   return (
     <div className="dashboard">
+      {loading && <Loading />}
+      <ToastContainer />
+
       {/* Phần header */}
       <Header
         username="" // Truyền username nếu có
@@ -59,7 +102,7 @@ const Dashboard = () => {
         middleContent={<SearchItem />}
       ></Header>
 
-      <div className="main-content container-fluid m-4">
+      <div className="main-content p-3">
         <div className="row">
           {/* Phần bên trái */}
           <div className="dashboard-main-content-left col-md-8">
@@ -105,7 +148,29 @@ const Dashboard = () => {
                 />
               </div>
             </div>
+            {/* Biểu đồ tiến trình học */}
+            <div className="dashboard-chart row mb-3 w-100">
+              <h5 className="fw-bold">Tiến trình học</h5>
+              <Bar
+                data={chartData}
+                options={{
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: "top",
+                    },
+                    title: {
+                      display: true,
+                      text: "Tiến trình học tập theo khóa",
+                    },
+                  },
+                }}
+              />
+            </div>
+          </div>
 
+          {/* Phần bên phải */}
+          <div className="main-contain-right col-md-4">
             {/* Phần Course Progress Card */}
             <div className="row">
               <div className="col-md-12">
@@ -125,40 +190,6 @@ const Dashboard = () => {
                 ))}
               </div>
             </div>
-          </div>
-
-          {/* Phần bên phải */}
-          <div className="main-contain-right col-md-4 px-5">
-            <div className="d-flex">
-              <div className="">
-                <h5 className="fw-bold">Lịch học</h5>
-                <h6>{date}</h6>
-              </div>
-            </div>
-            <div className="listschedule">
-              {[
-                // Lịch học mẫu
-                { time: "10:00 AM", label: "Học", title: "Lập trình Python" },
-                { time: "14:00 PM", label: "Học", title: "Lập trình C++" },
-                {
-                  time: "16:00 PM",
-                  label: "Học",
-                  title: "Lập trình JavaScript",
-                },
-                { time: "20:00 PM", label: "Học", title: "Lập trình Java" },
-              ].map((schedule, index) => (
-                <div key={index}>
-                  <CardSchedule
-                    time={schedule.time}
-                    label={schedule.label}
-                    title={schedule.title}
-                  />
-                </div>
-              ))}
-            </div>
-            <button className="btn btn-outline-dark rounded-pill py-2 my-3 w-100 fw-bold">
-              Tất cả lịch học
-            </button>
           </div>
         </div>
       </div>

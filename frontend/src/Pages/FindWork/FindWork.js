@@ -4,6 +4,7 @@ import SearchItem from "../../components/SearchItem/SearchItem";
 import API_URL from "../../config/API_URL";
 import "./FindWork.css"; // Chỉ cần giữ các phần không liên quan đến phân trang
 import { toast, ToastContainer } from "react-toastify";
+import Loading from "../../components/Loading/Loading";
 
 const FindWork = () => {
   // Quản lý trạng thái tìm kiếm và công việc

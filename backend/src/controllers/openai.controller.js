@@ -1,9 +1,15 @@
 const { OpenAI } = require("openai");
 const { findUserByUid } = require("../models/repositories/user.repo");
-const { findStudyMaterialsByKeyword } = require("../models/repositories/study_material.repo");
-const { saveChat, getChatHistoryByUserId, deleteChatHistoryByUserId } = require("../models/repositories/chatHistory.repo");
+const {
+  findStudyMaterialsByKeyword,
+} = require("../models/repositories/study_material.repo");
+const {
+  saveChat,
+  getChatHistoryByUserId,
+  deleteChatHistoryByUserId,
+} = require("../models/repositories/chatHistory.repo");
 const { convertToObjectIdMongodb } = require("../utils");
-require('dotenv').config();
+require("dotenv").config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,52 +20,52 @@ const getContentAI = async (prompt) => {
     const response = await openai.chat.completions.create({
       messages: [
         {
-          role: "system", content: 'You are a helpful assistant.'
+          role: "system",
+          content: "You are a helpful assistant.",
         },
-        { role: "user", content: prompt }
+        { role: "user", content: prompt },
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       max_tokens: 1080,
       temperature: 0.8,
     });
-  
+
     let content = response.choices[0].message.content;
     return content;
-  }
-  catch(error){
+  } catch (error) {
     return error.message;
   }
-}
+};
 
 const suggest = async (req, res) => {
   try {
-
     const username = req.user.username;
 
     const userFound = await findUserByUid(username);
 
-    const markOrderLow = userFound.list_mark
-      .sort((a, b) => a.mark - b.mark)
+    const markOrderLow = userFound.list_mark.sort((a, b) => a.mark - b.mark);
     // .slice(0, 1);
 
-    const listVid = await findStudyMaterialsByKeyword(markOrderLow[0].subjectName);
+    const listVid = await findStudyMaterialsByKeyword(
+      markOrderLow[0].subjectName
+    );
 
     console.log(req.user);
 
     const exampleResponse = [
       {
-        "day": "Thứ Hai",
-        "time": "10:00",
-        "video_title": "",
-        "url": "",
-        "embed_code": ""
+        day: "Thứ Hai",
+        time: "10:00",
+        video_title: "",
+        url: "",
+        embed_code: "",
       },
       {
-        "day": "Thứ Ba",
-        "time": "14:00",
-        "video_title": "",
-        "url": "",
-        "embed_code": ""
+        day: "Thứ Ba",
+        time: "14:00",
+        video_title: "",
+        url: "",
+        embed_code: "",
       },
     ];
 
@@ -68,7 +74,7 @@ const suggest = async (req, res) => {
     // let content = await getContentAI(prompt);;
 
     res.status(200).json({
-      message: 'Get content success',
+      message: "Get content success",
       // data: JSON.parse(content),
       // data: content,
     });
@@ -84,9 +90,9 @@ const chatWithAI = async (req, res) => {
   const userId = convertToObjectIdMongodb(req.user._id);
 
   try {
-    if (message === '') {
+    if (message === "") {
       return res.status(400).json({
-        message: 'message can not be blank',
+        message: "message can not be blank",
       });
     }
 
@@ -95,15 +101,15 @@ const chatWithAI = async (req, res) => {
     const aiResponse = await getContentAI(message);
     const isSavedChat = await saveChat(userId, message, aiResponse);
 
-    if(!isSavedChat){
+    if (!isSavedChat) {
       res.status(400).json({
-        message: 'Try again',
+        message: "Try again",
       });
     }
 
     // Trả kết quả cho người dùng
     res.status(200).json({
-      message: 'Chat successful',
+      message: "Chat successful",
       answer: aiResponse,
     });
   } catch (error) {
@@ -120,7 +126,7 @@ const getChatHistory = async (req, res) => {
     const chatHistory = await getChatHistoryByUserId(userId);
     if (!chatHistory) {
       return res.status(404).json({
-        message: "No chat history found"
+        message: "No chat history found",
       });
     }
 
@@ -141,7 +147,7 @@ const clearChatHistory = async (req, res) => {
   try {
     await deleteChatHistoryByUserId(userId);
     res.status(200).json({
-      message: 'Chat history cleared successfully',
+      message: "Chat history cleared successfully",
     });
   } catch (error) {
     res.status(error.response?.status || 500).json({
@@ -150,11 +156,10 @@ const clearChatHistory = async (req, res) => {
   }
 };
 
-
 module.exports = {
   getContentAI,
   suggest,
   chatWithAI,
   getChatHistory,
-  clearChatHistory
+  clearChatHistory,
 };
