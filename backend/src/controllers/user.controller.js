@@ -2,7 +2,8 @@ const bcrypt = require('bcrypt');
 const { findUserByUid, isExistedUser, createUser, updateUser, updateRoleUser } = require('../models/repositories/user.repo');
 const { generateToken } = require('../services/token.service');
 const { getTokenTlu, getSummaryMark, getListMarkDetail, getCourseSubject } = require('./student.controller');
-const { parseDate, parseTimestampToDate, formatDate, getInfoData, pickFieldObject } = require('../utils');
+const { parseDate, formatDate } = require('../utils');
+const Invoice = require('../models/invoice.model');
 
 const signup = async (req, res) => {
     try {
@@ -223,11 +224,65 @@ const changePassword = async(req, res) => {
     }
 }
 
+const checkMembershipStatus = async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+        const latestInvoice = await Invoice.findOne({ userId, status: 'paid' })
+            .sort({ createdAt: -1 }) // Sắp xếp giảm dần theo thời gian tạo
+            .exec();
+
+        if (!latestInvoice) {
+            return res.status(200).json({
+                isPaidMember: false,
+                daysRemaining: 0,
+                message: 'User is not a paid member',
+            });
+        }
+
+        // Lấy thông tin từ hóa đơn
+        const { plan, createdAt } = latestInvoice;
+        const now = new Date();
+
+        // Tính thời gian hết hạn
+        const expiryDate = new Date(createdAt);
+        if (plan === 'month') {
+            expiryDate.setMonth(expiryDate.getMonth() + 1); // Thêm 1 tháng
+        } else if (plan === 'year') {
+            expiryDate.setFullYear(expiryDate.getFullYear() + 1); // Thêm 1 năm
+        }
+
+        // Tính số ngày còn lại
+        const timeDiff = expiryDate - now;
+        const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Chuyển đổi ms sang ngày
+
+        if (timeDiff <= 0) {
+            return res.status(200).json({
+                isPaidMember: false,
+                daysRemaining: 0,
+                message: 'Membership has expired',
+            });
+        }
+
+        return res.status(200).json({
+            isPaidMember: true,
+            daysRemaining,
+            message: 'User is a paid member',
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: `Error checking membership status: ${error.message}`,
+        });
+    }
+};
+
+
 module.exports = {
     signup,
     login,
     getCurrentUser,
     syncDataStudent,
     updateRole,
-    changePassword
+    changePassword,
+    checkMembershipStatus
 }
