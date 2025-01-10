@@ -9,11 +9,14 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS
 
 const Setting = () => {
-  const location = useLocation()
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
+  const [membershipStatus, setMembershipStatus] = useState({
+    isPaidMember: false,
+    daysRemaining: 0,
+  });
   const [showModalSync, setShowModalSync] = useState(false);
   const [showModalPassword, setShowModalPassword] = useState(false);
-  const [showModalChangeRoleUser, setShowModalChangeRoleUser] = useState(false);
   const [syncData, setSyncData] = useState({
     username: "",
     password: "",
@@ -41,6 +44,41 @@ const Setting = () => {
     else if (status === "CANCELLED") {
       toast.error("Đã huỷ thanh toán");
     }
+  }, [location]);
+
+  useEffect(() => {
+    const fetchMembershipStatus = async () => {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_URL}/user/checkMembershipStatus`,
+          {},
+          {
+            headers: { Authorization: token },
+          }
+        );
+
+        if (response.status === 200) {
+          setMembershipStatus(response.data);
+        }
+      } catch (err) {
+        toast.error("Không thể lấy trạng thái thành viên. Vui lòng thử lại!");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+
+    if (status === "PAID") {
+      toast.success("Thanh toán thành công!");
+    } else if (status === "CANCELLED") {
+      toast.error("Đã huỷ thanh toán");
+    }
+
+    fetchMembershipStatus();
   }, [location]);
 
   const handleSyncChange = (e) => {
@@ -139,9 +177,7 @@ const Setting = () => {
     }
   };
 
-  const handleChangeRoleUser = async (plan) => {
-    // e.preventDefault();
-    setShowModalChangeRoleUser(false);
+  const handleUpgradeMembership = async (plan) => {
     setLoading(true); // Bắt đầu loading
 
     // make payment link
@@ -149,7 +185,7 @@ const Setting = () => {
       const response = await axios.post(
         `${API_URL}/invoice`,
         {
-          plan
+          plan,
         },
         {
           headers: {
@@ -161,7 +197,7 @@ const Setting = () => {
 
       if (response.status === 200) {
         const checkoutUrl = response.data.data.checkoutUrl;
-        window.open(checkoutUrl, '_blank');
+        window.open(checkoutUrl, "_blank");
       }
     } catch (err) {
       // Kiểm tra lỗi HTTP
@@ -192,11 +228,40 @@ const Setting = () => {
 
       {/* Nội dung chính */}
       <div className="setting-content p-4 rounded shadow-sm mt-4 bg-white">
-        <h2 className="text-primary mb-4">Tùy chọn cài đặt</h2>
+        <h2 className="text-primary mb-4">Trạng thái tài khoản</h2>
+
+        <div className="membership-status mb-4">
+          {membershipStatus.isPaidMember ? (
+            <div className="alert alert-success">
+              <strong>Bạn đang là thành viên VIP.</strong> Số ngày còn lại:{" "}
+              <strong>{membershipStatus.daysRemaining} ngày</strong>.
+            </div>
+          ) : (
+            <div className="alert alert-warning">
+              <strong>Bạn đang sử dụng tài khoản thường.</strong> Nâng cấp để
+              trải nghiệm các tính năng VIP!
+              <div className="d-flex justify-content-between mt-3">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleUpgradeMembership("month")}
+                >
+                  Nâng cấp 1 tháng
+                </button>
+                <button
+                  className="btn btn-success"
+                  onClick={() => handleUpgradeMembership("year")}
+                >
+                  Nâng cấp 1 năm
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Các tùy chọn */}
+        <h2 className="text-primary mb-4">Tùy chọn cài đặt</h2>
         <div className="row">
-          <div className="col-md-4 mb-4">
+          <div className="col-md-6 mb-4">
             <div
               style={{ minHeight: "200px", maxHeight: "240px" }}
               className="card p-3 border-primary shadow-sm overflow-hiden"
@@ -213,7 +278,7 @@ const Setting = () => {
               </button>
             </div>
           </div>
-          <div className="col-md-4 mb-4">
+          <div className="col-md-6 mb-4">
             <div
               style={{ minHeight: "200px", maxHeight: "240px" }}
               className="card p-3 border-danger shadow-sm overflow-hiden"
@@ -225,23 +290,6 @@ const Setting = () => {
               <button
                 className="btn btn-danger w-100"
                 onClick={() => setShowModalPassword(true)}
-              >
-                Thực hiện
-              </button>
-            </div>
-          </div>
-          <div className="col-md-4 mb-4">
-            <div
-              style={{ minHeight: "200px", maxHeight: "240px" }}
-              className="card p-3 border-success shadow-sm overflow-hiden"
-            >
-              <h5 className="card-title text-success">Nâng cấp tài khoản</h5>
-              <p className="card-text text-muted">
-                Trở thành thành viên VIP để sử dụng nhiều tính năng hơn.
-              </p>
-              <button
-                className="btn btn-success w-100"
-                onClick={() => setShowModalChangeRoleUser(true)}
               >
                 Thực hiện
               </button>
@@ -379,41 +427,8 @@ const Setting = () => {
           </div>
         )}
 
-        {/* Modal Đổi mật khẩu */}
-        {showModalChangeRoleUser && (
-          <div className="modal fade show" style={{ display: "block" }}>
-            <div className="modal-dialog">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Chọn gói</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setShowModalChangeRoleUser(false)}
-                  ></button>
-                </div>
-                <div className="modal-body">
-                  <form onSubmit={handleChangeRoleUser}>
-                    <div className="d-flex justify-content-between">
-                      <button type="submit" className="btn btn-success" onClick={() => handleChangeRoleUser("month")}>
-                        1 tháng (30,000 VNĐ)
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-danger"
-                        onClick={() => handleChangeRoleUser("year")}>
-                        1 năm (300,000 VNĐ)
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Nền tối cho modal */}
-        {(showModalSync || showModalPassword || showModalChangeRoleUser) && (
+        {(showModalSync || showModalPassword) && (
           <div className="modal-backdrop fade show"></div>
         )}
       </div>

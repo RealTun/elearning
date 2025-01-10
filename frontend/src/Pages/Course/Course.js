@@ -102,7 +102,6 @@ const Course = () => {
         const data = response.data.data;
         setCourses(data);
         console.log(data[0]._id);
-        
       } catch (err) {
         setError(err.message);
       } finally {
@@ -130,31 +129,17 @@ const Course = () => {
       ></Header>
 
       <div className="wrapper p-3">
-        <h2>Đề xuất</h2>
-        <Slider {...settings}>
-          <CardCourse image={img} title="Lập trình python" />
-          <CardCourse image={img} title="Lập trình python" />
-          <CardCourse image={img} title="Lập trình python" />
-          <CardCourse image={img} title="Lập trình python" />
-          <CardCourse image={img} title="Lập trình python" />
-        </Slider>
-
-        <h2 className="mt-3 ">Khóa học</h2>
         <Slider {...settings}>
           {courses.map((course, index) => (
-            
-              <CardCourse
-                key={index}
-                image={img}
-                title={course.playlist_title}
-                lessons={course.list_video.length}
-                playlistId={course._id} // Truyền ID để sử dụng trong "Xem chi tiết"
-              />
+            <CardCourse
+              key={index}
+              image={img}
+              title={course.playlist_title}
+              lessons={course.list_video.length}
+              playlistId={course._id} // Truyền ID để sử dụng trong "Xem chi tiết"
+            />
           ))}
         </Slider>
-
-        <h2 className="mt-3">Lộ trình khóa học</h2>
-        {/* Nội dung khác */}
       </div>
     </div>
   );

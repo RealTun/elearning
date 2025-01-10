@@ -29,7 +29,7 @@ const SideBar = () => {
             <i className="fas fa-briefcase "></i> Khóa học
           </Link>
         </li>
-        <li className="mb-3">
+        {/* <li className="mb-3">
           <Link
             to="/document"
             className="text-decoration-none text-white d-flex align-items-center px-3 py-2 mx-1"
@@ -44,7 +44,7 @@ const SideBar = () => {
           >
             <i class="fa-solid fa-calendar-days "></i> Lịch học
           </Link>
-        </li>
+        </li> */}
         <li className="mb-3">
           <Link
             to="/findwork"

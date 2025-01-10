@@ -10,6 +10,8 @@ const ChatApp = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messageEndRef = useRef(null);
 
+  
+
   // Lấy lịch sử chat
   useEffect(() => {
     const token = localStorage.getItem("token");
