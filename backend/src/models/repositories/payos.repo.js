@@ -20,7 +20,7 @@ const createPaymentLink = async (body) => {
         return data;
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         return null;
     }
 };

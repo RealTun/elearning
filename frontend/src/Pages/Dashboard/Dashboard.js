@@ -1,22 +1,60 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Dashboard.css";
 import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
 import InfoCard from "../../components/Card/CardDashboard";
 import CourseProgressCard from "../../components/Card/CourseProgressCard.js";
 import CardSchedule from "../../components/Card/CardSchedule.js";
+import API_URL from "../../config/API_URL";
+import axios from "axios";
 
 const Dashboard = () => {
   const [date, setDate] = useState("Thứ 4,8/1/2024");
+  const [courseProgress, setCourseProgress] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  console.log(JSON.parse(localStorage.getItem("user"))); 
-  
+  useEffect(() => {
+    const fetchCourseProgress = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.post(
+          `${API_URL}/user/getUserCourseProgress`,
+          {},
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setCourseProgress(response.data.data); // Lưu tiến trình các khóa học
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseProgress();
+  }, []);
+
+  if (loading) {
+    return <div>Đang tải dữ liệu...</div>;
+  }
+
+  if (error) {
+    return <div>Lỗi: {error}</div>;
+  }
 
   return (
     <div className="dashboard">
       {/* Phần header */}
       <Header
-        username="" //truyền username
+        username="" // Truyền username nếu có
         title="Tổng quan"
         middleContent={<SearchItem />}
       ></Header>
@@ -30,10 +68,10 @@ const Dashboard = () => {
               <div className="col-md-4">
                 <InfoCard
                   icon={
-                    <i class="fas fa-book" style={{ color: "#569AE3" }}></i>
+                    <i className="fas fa-book" style={{ color: "#569AE3" }}></i>
                   }
                   title="Đang học"
-                  value={5}
+                  value={courseProgress.length}
                   bgColor="bg-blue"
                 />
               </div>
@@ -43,41 +81,28 @@ const Dashboard = () => {
                     <i className="bi bi-check-circle-fill text-success"></i>
                   }
                   title="Đã hoàn thành"
-                  value={5}
+                  value={
+                    courseProgress.filter(
+                      (course) =>
+                        course.progress.split("/")[0] ===
+                        course.progress.split("/")[1]
+                    ).length
+                  }
                   bgColor="bg-green"
                 />
               </div>
               <div className="col-md-4 mb-3">
                 <InfoCard
                   icon={
-                    <i class="fas fa-award" style={{ color: "#FDAB5F" }}></i>
+                    <i
+                      className="fas fa-award"
+                      style={{ color: "#FDAB5F" }}
+                    ></i>
                   }
                   title="Chứng chỉ đạt được"
-                  value={3}
+                  value={3} // Thay giá trị thực nếu có
                   bgColor="bg-orange"
                 />
-              </div>
-            </div>
-
-            {/*Biểu đồ  */}
-            <div className="dashboard-chart row mb-3">
-              <div className="col-md-8">
-                <iframe
-                  src="https://chart.googleapis.com/chart?cht=bvg&chs=250x200&chd=t:10,20,30,40,50&chl=Jan|Feb|Mar|Apr|May"
-                  width="100%"
-                  height="300px"
-                  title="Biểu đồ 2"
-                  style={{ border: "1px solid #ccc", borderRadius: "15px" }}
-                ></iframe>
-              </div>
-              <div className="col-md-4">
-                <iframe
-                  src="https://chart.googleapis.com/chart?cht=bvg&chs=250x200&chd=t:10,20,30,40,50&chl=Jan|Feb|Mar|Apr|May"
-                  width="100%"
-                  height="300px"
-                  title="Biểu đồ 2"
-                  style={{ border: "1px solid #ccc", borderRadius: "15px" }}
-                ></iframe>
               </div>
             </div>
 
@@ -85,22 +110,19 @@ const Dashboard = () => {
             <div className="row">
               <div className="col-md-12">
                 <h5 className="fw-bold">Khóa học của tôi</h5>
-
-                <div>
-                  <CourseProgressCard
-                    title="Lập trình Python"
-                    lessons={10}
-                    progress={50}
-                  />
-                </div>
-
-                <div>
-                  <CourseProgressCard
-                    title="Lập trình Java"
-                    lessons={15}
-                    progress={75}
-                  />
-                </div>
+                {courseProgress.map((course, index) => (
+                  <div key={index}>
+                    <CourseProgressCard
+                      title={course.course}
+                      lessons={course.progress.split("/")[1]}
+                      progress={Math.round(
+                        (parseInt(course.progress.split("/")[0]) /
+                          parseInt(course.progress.split("/")[1])) *
+                          100
+                      )}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -113,25 +135,9 @@ const Dashboard = () => {
                 <h6>{date}</h6>
               </div>
             </div>
-            {/* <div className="cardschedule">
-            <div>
-              <CardSchedule
-                time="10:00 AM"
-                label="Học"
-                title="Lập trình Python"
-              />
-            </div>
-
-            <div>
-              <CardSchedule
-                time="20:00 PM"
-                label="Học"
-                title="Lập trình Java"
-              />
-            </div>
-          </div> */}
             <div className="listschedule">
               {[
+                // Lịch học mẫu
                 { time: "10:00 AM", label: "Học", title: "Lập trình Python" },
                 { time: "14:00 PM", label: "Học", title: "Lập trình C++" },
                 {

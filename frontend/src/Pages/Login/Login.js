@@ -121,9 +121,12 @@ const Login = () => {
             </button>
           </form>
           <p className="text-center mt-3">
-            <a href="/signup" className="text-decoration-none text-black">
-              Bạn chưa có tài khoản? Đăng ký ngay
-            </a>
+            <span>
+              Bạn chưa có tài khoản?{" "}
+              <a href="/signup" className="text-danger text-decoration-none fw-bold">
+                Đăng ký ngay
+              </a>
+            </span>
           </p>
         </div>
 

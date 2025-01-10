@@ -2,12 +2,15 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Chatbot.css";
 import Header from "../../layouts/Header/Header";
 import API_URL from "../../config/API_URL.js";
+import { ToastContainer } from "react-toastify";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messageEndRef = useRef(null);
+
+  
 
   // Lấy lịch sử chat
   useEffect(() => {

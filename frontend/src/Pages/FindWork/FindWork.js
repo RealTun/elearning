@@ -3,6 +3,7 @@ import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
 import API_URL from "../../config/API_URL";
 import "./FindWork.css"; // Chỉ cần giữ các phần không liên quan đến phân trang
+import Loading from "../../components/Loading/Loading";
 
 const FindWork = () => {
   // Quản lý trạng thái tìm kiếm và công việc
@@ -12,6 +13,7 @@ const FindWork = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isSuggestedCollapsed, setIsSuggestedCollapsed] = useState(false); // Thêm trạng thái collapse cho "Đề xuất công việc"
   const [suggestedJobs, setSuggestedJobs] = useState([]); // Thêm state cho các công việc đề xuất
+  const [loading, setLoading] = useState(false);
   const itemsPerPage = 6;
 
   // Tính toán dữ liệu cần hiển thị trên trang hiện tại
@@ -26,6 +28,8 @@ const FindWork = () => {
   const fetchAPI = async (url, method = "POST", body = {}) => {
     try {
       const token = localStorage.getItem("token");
+      setLoading(true);
+
       const response = await fetch(url, {
         method: method,
         headers: {
@@ -42,6 +46,8 @@ const FindWork = () => {
       }
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,6 +91,7 @@ const FindWork = () => {
 
   return (
     <div className="findwork">
+      {loading && <Loading />}
       <Header username="HuongPTA" title="Tìm việc" />
 
       {/* Nội dung chính */}

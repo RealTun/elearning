@@ -11,30 +11,50 @@ import "./ShowCourse.css";
 const convertToEmbedUrl = (url) => {
   if (!url) return "";
 
-  // Kiểm tra nếu URL có chứa "watch?v="
   if (url.includes("watch?v=")) {
     return url.replace("watch?v=", "embed/");
   }
-
-  // Kiểm tra nếu URL có dạng `youtu.be`
   if (url.includes("youtu.be")) {
     return url.replace("youtu.be/", "www.youtube.com/embed/");
   }
-
-  // Nếu URL đã là embed
   if (url.includes("embed/")) {
     return url;
   }
 
-  return url; // Trả về URL gốc nếu không khớp
+  return url;
 };
 
 const ShowCourse = () => {
   const { id } = useParams(); // Lấy id từ URL
-  const [courseDetail, setCourseDetail] = useState(null); // Thay đổi để tránh lỗi khi dữ liệu null
+  const [courseDetail, setCourseDetail] = useState(null); // Tránh lỗi khi dữ liệu null
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0); // Theo dõi video đang phát
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  console.log();
+  
+  // Định nghĩa hàm `addWatchHistory` bên ngoài tất cả các `useEffect`
+  const addWatchHistory = async (videoId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        `${API_URL}/documents`,
+        { documentId: videoId },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      );
+
+      if (response) {
+        console.log("Added to Watch History:", response.data.data);
+      }
+    } catch (err) {
+      toast.error(`Add Watch History Error: ${err.message}`);
+    }
+  };
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -48,18 +68,25 @@ const ShowCourse = () => {
         });
         if (response) {
           setCourseDetail(response.data.data); // Lưu dữ liệu khóa học
-          console.log("Fetched Data:", response.data.data); // Log ngay sau khi fetch
+          console.log("Fetched Data:", response.data.data);
         }
       } catch (err) {
-        toast.error(err.message); // Lưu lỗi (nếu có)
+        toast.error(err.message);
       } finally {
-        setLoading(false); // Kết thúc trạng thái loading
+        setLoading(false);
       }
     };
 
     fetchCourseDetail();
-  }, [id]); // Chỉ chạy lại khi `id` thay đổi
+  }, [id]);
 
+  useEffect(() => {
+    if (courseDetail && courseDetail.list_video) {
+      addWatchHistory(courseDetail.list_video[currentVideoIndex]._id);
+    }
+  }, [courseDetail, currentVideoIndex]); // Gửi lịch sử khi `currentVideoIndex` hoặc `courseDetail` thay đổi
+
+  if (loading) return <Loading />;
   if (error) {
     toast.error(error);
     return (
@@ -80,14 +107,20 @@ const ShowCourse = () => {
   const { playlist_title, list_video } = courseDetail;
   const currentVideo = list_video[currentVideoIndex];
 
-  // Điều hướng video
   const handlePrevious = () => {
-    if (currentVideoIndex > 0) setCurrentVideoIndex(currentVideoIndex - 1);
+    if (currentVideoIndex > 0) {
+      setCurrentVideoIndex((prevIndex) => prevIndex - 1);
+    }
   };
 
   const handleNext = () => {
-    if (currentVideoIndex < list_video.length - 1)
-      setCurrentVideoIndex(currentVideoIndex + 1);
+    if (currentVideoIndex < list_video.length - 1) {
+      setCurrentVideoIndex((prevIndex) => prevIndex + 1);
+    }
+  };
+
+  const handleVideoClick = (index) => {
+    setCurrentVideoIndex(index);
   };
 
   return (
@@ -113,7 +146,7 @@ const ShowCourse = () => {
             <iframe
               className="video-frame"
               src={convertToEmbedUrl(currentVideo.url)}
-              title="React Course"
+              title={currentVideo.title || "Video"}
               allowFullScreen
             ></iframe>
           </div>
@@ -129,7 +162,7 @@ const ShowCourse = () => {
                 className={`list-group-item ${
                   index === currentVideoIndex ? "active" : ""
                 }`}
-                onClick={() => setCurrentVideoIndex(index)}
+                onClick={() => handleVideoClick(index)}
               >
                 <strong>Bài {index + 1}:</strong> {video.title}
               </li>
