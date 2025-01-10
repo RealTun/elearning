@@ -1,4 +1,5 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom"; // Import useLocation
 import Header from "../../layouts/Header/Header";
 import "./Setting.css";
 import API_URL from "../../config/API_URL";
@@ -8,6 +9,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS
 
 const Setting = () => {
+  const location = useLocation()
   const [loading, setLoading] = useState(false);
   const [showModalSync, setShowModalSync] = useState(false);
   const [showModalPassword, setShowModalPassword] = useState(false);
@@ -22,6 +24,24 @@ const Setting = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const status = params.get("status");
+
+    if (status === "PAID") {
+      toast.success("Thanh toán thành công!");
+    }
+    // else if (status === "PENDING") {
+    //   toast.error("Trang đã tải với tham số status=false");
+    // }
+    // else if (status === "PROCESSING") {
+    //   toast.error("Trang đã tải với tham số status=false");
+    // }
+    else if (status === "CANCELLED") {
+      toast.error("Đã huỷ thanh toán");
+    }
+  }, [location]);
 
   const handleSyncChange = (e) => {
     const { name, value } = e.target;
@@ -119,15 +139,18 @@ const Setting = () => {
     }
   };
 
-  const handleChangeRoleUser = async (e) => {
-    e.preventDefault();
+  const handleChangeRoleUser = async (plan) => {
+    // e.preventDefault();
     setShowModalChangeRoleUser(false);
     setLoading(true); // Bắt đầu loading
 
+    // make payment link
     try {
-      const response = await axios.patch(
-        `${API_URL}/student/role`,
-        {},
+      const response = await axios.post(
+        `${API_URL}/invoice`,
+        {
+          plan
+        },
         {
           headers: {
             "Content-Type": "application/json",
@@ -137,32 +160,23 @@ const Setting = () => {
       );
 
       if (response.status === 200) {
-        localStorage.removeItem("token");
-        localStorage.setItem("token", response.data.data)
-        toast.success("Nâng cấp người dùng thành công!");
+        const checkoutUrl = response.data.data.checkoutUrl;
+        window.open(checkoutUrl, '_blank');
       }
     } catch (err) {
       // Kiểm tra lỗi HTTP
       if (err.response) {
         const { status } = err.response;
-        if (status === 400) {
-          toast.warning("Nâng cấp người dùng thất bại!");
-        } else if (status === 401) {
-          toast.error("Bạn không có quyền truy cập. Vui lòng đăng nhập lại!");
-          // Tùy chọn: Redirect người dùng về trang đăng nhập
-          localStorage.removeItem("token");
-          setTimeout(() => {
-            window.location.href = "/login";
-          }, 3000); // Chuyển trang sau 3 giây
+        if (status === 503) {
+          toast.warning("Tạo link thanh toán thất bại. Vui lòng thử lại sau!");
         } else if (status === 500) {
           toast.error("Không thể kết nối đến server. Vui lòng thử lại sau!");
         }
       } else {
-        // Lỗi khác (mạng, không phản hồi, v.v.)
         toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau!");
       }
     } finally {
-      setLoading(false); // Kết thúc loading
+      setLoading(false);
     }
   };
 
@@ -371,7 +385,7 @@ const Setting = () => {
             <div className="modal-dialog">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Thay đổi quyền người dùng</h5>
+                  <h5 className="modal-title">Chọn gói</h5>
                   <button
                     type="button"
                     className="btn-close"
@@ -380,9 +394,17 @@ const Setting = () => {
                 </div>
                 <div className="modal-body">
                   <form onSubmit={handleChangeRoleUser}>
-                    <button type="submit" className="btn btn-success w-100">
-                      Nâng cấp người dùng
-                    </button>
+                    <div className="d-flex justify-content-between">
+                      <button type="submit" className="btn btn-success" onClick={() => handleChangeRoleUser("month")}>
+                        1 tháng (30,000 VNĐ)
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-danger"
+                        onClick={() => handleChangeRoleUser("year")}>
+                        1 năm (300,000 VNĐ)
+                      </button>
+                    </div>
                   </form>
                 </div>
               </div>

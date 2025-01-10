@@ -5,11 +5,15 @@ const { findStudyMaterials, getAllStudyMaterials, importDataFromCSV, getStudyMat
 const { signup, login, syncDataStudent, updateRole, getCurrentUser, changePassword } = require('../controllers/user.controller');
 const { authenticateToken, checkRole } = require('../middleware/auth.middleware');
 const { getDocumentbyId } = require('../controllers/document.controller');
+const { getInvoicesByUserIdAPI, createInvoiceAPI, updateInvoiceStatusAPI, deleteInvoiceAPI } = require('../controllers/invoice.controller');
 const router = express.Router();
 
 // auth
 router.post('/signup', signup);
 router.post('/login', login);
+
+// webhook payos
+router.post('/payment/payos', updateInvoiceStatusAPI);
 
 // middleware auth
 router.use(authenticateToken);
@@ -37,6 +41,12 @@ router.get('/studyMaterials/:id', getStudyMaterialsbyId);
 
 // document
 router.get('/documents/:id', getDocumentbyId);
+
+// invoice
+router.post('/invoice', createInvoiceAPI);
+router.get('/invoice/:id', getInvoicesByUserIdAPI);
+// router.patch('/invoice', updateInvoiceStatusAPI);
+router.delete('/invoice/:id', deleteInvoiceAPI);
 
 // middleware role
 router.use(checkRole('paid_user'));
