@@ -2,10 +2,11 @@ const express = require('express');
 const { searchJobs, findCompanyByName, predictCareer } = require('../controllers/job.controller');
 const { suggest, chatWithAI, getChatHistory, clearChatHistory } = require('../controllers/openai.controller');
 const { findStudyMaterials, getAllStudyMaterials, importDataFromCSV, getStudyMaterialsbyId } = require('../controllers/study_material.controller');
-const { signup, login, syncDataStudent, updateRole, getCurrentUser, changePassword } = require('../controllers/user.controller');
+const { signup, login, syncDataStudent, updateRole, getCurrentUser, changePassword, checkMembershipStatus } = require('../controllers/user.controller');
 const { authenticateToken, checkRole } = require('../middleware/auth.middleware');
 const { getDocumentbyId } = require('../controllers/document.controller');
 const { getInvoicesByUserIdAPI, createInvoiceAPI, updateInvoiceStatusAPI, deleteInvoiceAPI } = require('../controllers/invoice.controller');
+const { addWatchHistory, isDocumentWatched, getUserCourseProgress } = require('../controllers/watchHistory.controller');
 const router = express.Router();
 
 // auth
@@ -22,6 +23,8 @@ router.use(authenticateToken);
 router.get('/user', getCurrentUser);
 router.patch('/user/role', updateRole);
 router.patch('/user/changePassword', changePassword);
+router.post('/user/checkMembershipStatus', checkMembershipStatus);
+router.post('/user/getUserCourseProgress', getUserCourseProgress);
 
 // student
 router.post('/student/syncData', syncDataStudent);
@@ -40,13 +43,15 @@ router.get('/studyMaterials', getAllStudyMaterials);
 router.get('/studyMaterials/:id', getStudyMaterialsbyId);
 
 // document
-router.get('/documents/:id', getDocumentbyId);
+// router.get('/documents/:id', getDocumentbyId);
+router.post('/documents', addWatchHistory);
+router.post('/documents/:id', isDocumentWatched);
 
 // invoice
 router.post('/invoice', createInvoiceAPI);
-router.get('/invoice/:id', getInvoicesByUserIdAPI);
+// router.get('/invoice/:id', getInvoicesByUserIdAPI);
 // router.patch('/invoice', updateInvoiceStatusAPI);
-router.delete('/invoice/:id', deleteInvoiceAPI);
+// router.delete('/invoice/:id', deleteInvoiceAPI);
 
 // middleware role
 router.use(checkRole('paid_user'));

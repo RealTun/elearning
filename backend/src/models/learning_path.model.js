@@ -2,31 +2,21 @@ const mongoose = require('mongoose');
 
 const userLearningPathSchema = new mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId, // Liên kết tới người dùng
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true,
     },
-    video_id: {
-        type: mongoose.Schema.Types.ObjectId, // Liên kết tới video
+    course_id: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'StudyMaterial',
         required: true,
     },
     is_watched: {
-        type: Boolean, // Trạng thái đã xem hay chưa
+        type: Boolean,
         default: false,
-    },
-    is_completed: {
-        type: Boolean, // Trạng thái hoàn thành
-        default: false,
-    },
-    watched_at: {
-        type: Date, // Ngày xem video
-    },
-    completed_at: {
-        type: Date, // Ngày hoàn thành video
     },
     progress: {
-        type: Number, // Tiến trình xem video (phần trăm)
+        type: Number,
         default: 0,
         min: 0,
         max: 100,
