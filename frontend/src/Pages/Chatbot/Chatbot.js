@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Chatbot.css";
 import Header from "../../layouts/Header/Header";
 import API_URL from "../../config/API_URL.js";
+import { toast, ToastContainer } from "react-toastify";
 
 const ChatApp = () => {
   const [messages, setMessages] = useState([]);
@@ -59,8 +60,41 @@ const ChatApp = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const checkMembership = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/user/checkMembershipStatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isPaidMember === true) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      // console.error("Error checkMembership:", error);
+      return false;
+    }
+  }
+
   // Gửi tin nhắn
   const sendMessage = async () => {
+
+    const isPaidMember = await checkMembership();
+
+    if (!isPaidMember) {
+      toast.error("Vui lòng nâng cấp gói thành viên để sử dụng!", { autoClose: 2000 });
+      return;
+    }
+
     if (input.trim()) {
       const newMessage = {
         text: input,
@@ -120,6 +154,7 @@ const ChatApp = () => {
   return (
     <div>
       <Header username="HuongPTA" title="Chatbot" />
+      <ToastContainer></ToastContainer>
       <div className="chat-container">
         <ChatMain
           messages={messages}
@@ -147,14 +182,12 @@ const ChatMain = ({
       {messages.map((msg, index) => (
         <div
           key={index}
-          className={`chat-message mb-4 ${
-            msg.sender === "You" ? "outgoing" : "incoming"
-          }`}
+          className={`chat-message mb-4 ${msg.sender === "You" ? "outgoing" : "incoming"
+            }`}
         >
           <div
-            className={`chat-bubble ${
-              msg.sender === "You" ? "outgoing" : "incoming"
-            }`}
+            className={`chat-bubble ${msg.sender === "You" ? "outgoing" : "incoming"
+              }`}
           >
             <p>{msg.text}</p>
             <span className="chat-time">{msg.time}</span>

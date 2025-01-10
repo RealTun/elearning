@@ -3,6 +3,7 @@ import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
 import API_URL from "../../config/API_URL";
 import "./FindWork.css"; // Chỉ cần giữ các phần không liên quan đến phân trang
+import { toast, ToastContainer } from "react-toastify";
 
 const FindWork = () => {
   // Quản lý trạng thái tìm kiếm và công việc
@@ -64,8 +65,41 @@ const FindWork = () => {
     }
   };
 
+  const checkMembership = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/user/checkMembershipStatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.isPaidMember === true) {
+          return true;
+        }
+      }
+
+      return false;
+    } catch (error) {
+      // console.error("Error checkMembership:", error);
+      return false;
+    }
+  }
+
   // Gọi API để lấy công việc đề xuất
   const handleSuggestedJobsCollapse = async () => {
+
+    const isPaidMember = await checkMembership();
+
+    if (!isPaidMember) {
+      toast.error("Vui lòng nâng cấp gói thành viên để sử dụng!", { autoClose: 2000 });
+      return;
+    }
+
     if (!isSuggestedCollapsed) {
       const predictedData = await fetchAPI(`${API_URL}/predict/career`, "POST");
 
@@ -86,6 +120,7 @@ const FindWork = () => {
   return (
     <div className="findwork">
       <Header username="HuongPTA" title="Tìm việc" />
+      <ToastContainer></ToastContainer>
 
       {/* Nội dung chính */}
       <div className="findwork-content">
@@ -147,9 +182,8 @@ const FindWork = () => {
                 {Array.from({ length: totalPages }, (_, index) => (
                   <li
                     key={index}
-                    className={`page-item ${
-                      currentPage === index + 1 ? "active" : ""
-                    }`}
+                    className={`page-item ${currentPage === index + 1 ? "active" : ""
+                      }`}
                   >
                     <button
                       className="page-link"

@@ -20,7 +20,7 @@ const createPaymentLink = async (body) => {
         return data;
 
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         return null;
     }
 };
@@ -30,7 +30,7 @@ const handleWebHookPayOS = async (body) => {
         const webhookData = payOS.verifyPaymentWebhookData(body);
         return webhookData;
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
         return null;
     }
 }

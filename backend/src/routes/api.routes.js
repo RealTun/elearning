@@ -43,7 +43,7 @@ router.get('/studyMaterials', getAllStudyMaterials);
 router.get('/studyMaterials/:id', getStudyMaterialsbyId);
 
 // document
-// router.get('/documents/:id', getDocumentbyId);
+router.get('/documents/:id', getDocumentbyId);
 router.post('/documents', addWatchHistory);
 router.post('/documents/:id', isDocumentWatched);
 
@@ -54,7 +54,7 @@ router.post('/invoice', createInvoiceAPI);
 // router.delete('/invoice/:id', deleteInvoiceAPI);
 
 // middleware role
-router.use(checkRole('paid_user'));
+// router.use(checkRole('paid_user'));
 
 // openai
 router.post('/openai/suggest', suggest);
