@@ -1,202 +1,116 @@
+/* Tổng quan */
 .findwork {
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
-  padding: 20px 0;
-}
-
-.search-section {
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 30px 20px;
-  margin-bottom: 30px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.search-section h3 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 20px;
-}
-
-.input-group {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Ô nhập liệu mặc định */
-.input-group input {
-  border: 2px solid #ddd;
-  border-radius: 10px;
-  height: 45px;
-  padding: 10px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* Khi focus */
-.input-group input:focus {
-  border-color: #ff6f61; /* Màu cam nhạt */
-  box-shadow: 0 0 5px rgba(255, 111, 97, 0.5); /* Hiệu ứng bóng mềm mại */
-  outline: none; /* Loại bỏ đường viền mặc định */
-}
-
-.input-group button {
-  border: none;
-  background-color: #ff6f61;
-  color: #fff;
-  border-radius: 0 10px 10px 0;
-  height: 45px;
-  font-size: 16px;
-  padding: 0 20px;
-  cursor: pointer;
-}
-
-.input-group button:hover {
-  background-color: #e65c50;
-}
-
-.filter-buttons button {
-  margin: 10px 5px;
-  padding: 10px 20px;
-  background-color: #f1f1f1;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.filter-buttons button:hover {
-  background-color: #e0e0e0;
-  border-color: #bbb;
-}
-
-.recommendations {
-  margin-top: 20px;
-  padding: 20px;
-}
-
-.recommendations h2 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #444;
-  margin-bottom: 20px;
-}
-
-.job-card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-/* Cập nhật card job */
-.job-card {
-  background-color: #ffffff;
-  border-radius: 10px;
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-  height: 100%; /* Đảm bảo card có chiều cao đồng đều */
-}
-
-.job-card .card-body {
-  padding: 20px;
-  text-align: center;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.job-logo {
-  background-color: #f7f7f7;
-  border-radius: 50%;
-  height: 70px;
-  width: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0 auto 15px;
-  font-size: 18px;
-  color: #999;
-}
-
-.job-logo img {
-  max-width: 100%;
-  max-height: 60px;
-  object-fit: contain;
-}
-
-.job-card h5 {
-  font-size: 18px;
-  font-weight: bold;
-  color: #333;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.job-card p {
-  font-size: 14px;
-  color: #666;
-  max-height: 60px; /* Giới hạn chiều cao mô tả */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3; /* Giới hạn số dòng hiển thị */
-}
-
-.job-details {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #555;
-}
-
-.job-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
-
-.pagination .page-item.active .page-link {
-  background-color: #ff6f61;
-  border-color: #ff6f61;
-  color: white;
-  border-radius: 50%;
-}
-
-.pagination .page-link {
-  color: #6c757d;
-  border: none;
-  padding: 10px 15px;
-  font-size: 15px;
-  margin: 0 5px;
-  border-radius: 50%;
-  transition: background-color 0.3s;
-}
-
-.pagination .page-link:hover {
-  background-color: #ffefe9;
-  color: #ff6f61;
-}
-
-.pagination .page-item.disabled .page-link {
   background-color: #f8f9fa;
-  color: #d6d8db;
-}
+  min-height: 100vh;
+  padding-bottom: 30px; /* Để khoảng trống cho phân trang */
 
-.job-link {
-  color: inherit;
-}
+  .findwork-content {
+    margin: 20px auto;
+    max-width: 1200px;
+  }
 
-.job-link:hover,
-.job-link:focus,
-.job-link:active {
-  color: inherit;
-  text-decoration: none;
+  /* Phần tìm kiếm */
+  .search-section {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+
+  .input-group .form-control {
+    height: 50px;
+    font-size: 16px;
+    border-radius: 8px 0 0 8px;
+  }
+
+  .input-group .btn {
+    height: 50px;
+    font-size: 16px;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .input-group .btn:hover {
+    background-color: #e84118;
+  }
+
+  /* Danh sách công việc */
+  .recommendations h2,
+  .suggested-jobs h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
+    min-height: 230px;
+    max-height: 230px;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .card img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .card-text {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .card a {
+    text-decoration: none;
+  }
+
+  .card a:hover .card-title {
+    color: #007bff;
+  }
+
+  /* Phân trang */
+  .pagination {
+    margin-top: 20px;
+  }
+
+  .pagination .page-item.active .page-link {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .pagination .page-link {
+    color: #007bff;
+  }
+
+  .pagination .page-link:hover {
+    color: #0056b3;
+  }
+
+  /* Collapse */
+  button.btn-info {
+    background-color: #007bff;
+    border: none;
+    font-size: 14px;
+    padding: 8px 16px;
+    border-radius: 50px;
+  }
+
+  button.btn-info i {
+    font-size: 16px;
+  }
 }

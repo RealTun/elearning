@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import API_URL from "../../config/API_URL";
 import Loading from "../../components/Loading/Loading";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import CSS
+
 import "./ShowCourse.css";
 
 const convertToEmbedUrl = (url) => {
@@ -48,7 +51,7 @@ const ShowCourse = () => {
           console.log("Fetched Data:", response.data.data); // Log ngay sau khi fetch
         }
       } catch (err) {
-        setError(err.message); // Lưu lỗi (nếu có)
+        toast.error(err.message); // Lưu lỗi (nếu có)
       } finally {
         setLoading(false); // Kết thúc trạng thái loading
       }
@@ -57,9 +60,22 @@ const ShowCourse = () => {
     fetchCourseDetail();
   }, [id]); // Chỉ chạy lại khi `id` thay đổi
 
-  if (loading) return <Loading />;
-  if (error) return <div>Lỗi: {error}</div>;
-  if (!courseDetail) return <div>Không có dữ liệu để hiển thị</div>;
+  if (error) {
+    toast.error(error);
+    return (
+      <div>
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
+    );
+  }
+  if (!courseDetail) {
+    toast.warning("Không có dữ liệu để hiển thị");
+    return (
+      <div>
+        <ToastContainer position="top-right" autoClose={3000} />
+      </div>
+    );
+  }
 
   const { playlist_title, list_video } = courseDetail;
   const currentVideo = list_video[currentVideoIndex];
@@ -76,6 +92,8 @@ const ShowCourse = () => {
 
   return (
     <div className="show-course">
+      {loading && <Loading />}
+      <ToastContainer position="top-right" autoClose={3000} />
       {/* Header */}
       <div className="header">
         <div className="logo">
@@ -103,7 +121,7 @@ const ShowCourse = () => {
 
         {/* Nội dung khóa học */}
         <div className="col-md-3 course-content">
-          <h6 className="fw-bold">Danh sách bài học</h6>
+          <h6 className="fw-bold sticky top-0">Danh sách bài học</h6>
           <ul className="list-group">
             {list_video.map((video, index) => (
               <li
@@ -113,7 +131,7 @@ const ShowCourse = () => {
                 }`}
                 onClick={() => setCurrentVideoIndex(index)}
               >
-                <strong>Bài {index+1}:</strong> {video.title}
+                <strong>Bài {index + 1}:</strong> {video.title}
               </li>
             ))}
           </ul>

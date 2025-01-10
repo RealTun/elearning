@@ -281,7 +281,7 @@ const Profile = () => {
         <div className="row">
           <div className="col-md-8">
             <div className="row">
-              <div className="col-md-12 mb-2">
+              <div className="col-md-5 mb-2">
                 <div className="card">
                   <div className="card-header">Thông tin sinh viên</div>
                   <div className="card-body">
@@ -297,7 +297,7 @@ const Profile = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-12 mb-2">
+              <div className="col-md-7 mb-2">
                 <div className="card">
                   <div className="card-header">Thông tin chung</div>
                   <div className="card-body">

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "./FindWork.css"; // Chỉ cần giữ các phần không liên quan đến phân trang
 import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
 import API_URL from "../../config/API_URL";
+import "./FindWork.css"; // Chỉ cần giữ các phần không liên quan đến phân trang
 
 const FindWork = () => {
   // Quản lý trạng thái tìm kiếm và công việc
@@ -52,7 +52,11 @@ const FindWork = () => {
       return;
     }
 
-    const data = await fetchAPI(`${API_URL}/jobs/search`, "POST", { keyword: searchTerm, limit: 50, page: 0 });
+    const data = await fetchAPI(`${API_URL}/jobs/search`, "POST", {
+      keyword: searchTerm,
+      limit: 50,
+      page: 0,
+    });
 
     if (data) {
       setJobs(data.data);
@@ -66,11 +70,11 @@ const FindWork = () => {
       const predictedData = await fetchAPI(`${API_URL}/predict/career`, "POST");
 
       if (predictedData && predictedData.data) {
-        const suggestedData = await fetchAPI(
-          `${API_URL}/jobs/search`,
-          "POST",
-          { keyword: predictedData.data, limit: 3, page: 0 }
-        );
+        const suggestedData = await fetchAPI(`${API_URL}/jobs/search`, "POST", {
+          keyword: predictedData.data,
+          limit: 3,
+          page: 0,
+        });
 
         if (suggestedData) {
           setSuggestedJobs(suggestedData.data);
@@ -81,26 +85,22 @@ const FindWork = () => {
 
   return (
     <div className="findwork">
-      {/* Header */}
       <Header username="HuongPTA" title="Tìm việc" />
 
-      {/* Nội dung */}
-      <div className="findwork-content p-3">
+      {/* Nội dung chính */}
+      <div className="findwork-content">
         {/* Tìm kiếm */}
-        <div className="search-section py-4 bg-light shadow-sm rounded">
+        <div className="search-section py-4 shadow-sm">
           <div className="text-center">
             <div className="input-group mb-3 w-75 mx-auto">
               <input
                 type="text"
                 placeholder="Nhập vị trí việc làm..."
-                className="form-control rounded-start"
+                className="form-control"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)} // Cập nhật từ khóa
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button
-                className="btn btn-danger px-4 rounded-end"
-                onClick={handleSearch} // Gọi API khi ấn nút tìm kiếm
-              >
+              <button className="btn btn-danger px-4" onClick={handleSearch}>
                 Tìm kiếm
               </button>
             </div>
@@ -108,67 +108,48 @@ const FindWork = () => {
         </div>
 
         {/* Danh sách công việc */}
-        <div className="recommendations">
-          <div className="d-flex justify-content-between align-items-center mb-3">
+        <div className="recommendations mt-4">
+          <div className="d-flex justify-content-between align-items-center">
             <h2>Danh sách công việc</h2>
             <button
               className="btn btn-info"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseRecommendations"
-              aria-expanded={isCollapsed ? "true" : "false"}
-              aria-controls="collapseRecommendations"
-              onClick={() => setIsCollapsed(!isCollapsed)} // Đổi trạng thái khi click
+              onClick={() => setIsCollapsed(!isCollapsed)}
             >
               {isCollapsed ? (
-                <i className="bi bi-arrow-up-circle"></i> // Icon lên
+                <i className="bi bi-arrow-up-circle"></i>
               ) : (
-                <i className="bi bi-arrow-down-circle"></i> // Icon xuống
+                <i className="bi bi-arrow-down-circle"></i>
               )}
             </button>
           </div>
-
-          <div
-            id="collapseRecommendations"
-            className={`collapse ${isCollapsed ? "show" : ""}`} // Thêm class 'show' khi mở
-          >
-            <div className="row">
+          <div className={`collapse ${isCollapsed ? "show" : ""}`}>
+            <div className="row mt-3">
               {currentJobs.map((job) => (
                 <div key={job.id} className="col-md-4 mb-4">
-                  <div className="card" style={{minHeight: '300px'}}>
+                  <div className="card">
                     <a
-                      className="job-link text-decoration-none"
                       href={job.jobUrl}
-                      rel="noopener"
                       target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <div className="card-body text-center">
-                        <div className="job-logo bg-light p-3 mb-3">
-                          <img
-                            src={job.companyLogo}
-                            alt="Company Logo"
-                            style={{ maxHeight: "80px", objectFit: "contain" }}
-                          />
-                        </div>
+                      <img src={job.companyLogo} alt="Logo" />
+                      <div className="card-body">
                         <h5 className="card-title">{job.jobTitle}</h5>
                         <p className="card-text">{job.companyName}</p>
-                        <div className="d-flex justify-content-between">
-                          <span>{job.workingLocations}</span>
-                        </div>
                       </div>
                     </a>
                   </div>
                 </div>
               ))}
             </div>
-
-            {/* Phân trang với Bootstrap */}
-            <nav aria-label="Page navigation">
-              <ul className="pagination justify-content-center">
+            <nav className="pagination justify-content-center">
+              <ul className="pagination">
                 {Array.from({ length: totalPages }, (_, index) => (
                   <li
                     key={index}
-                    className={`page-item ${currentPage === index + 1 ? "active" : ""}`}
+                    className={`page-item ${
+                      currentPage === index + 1 ? "active" : ""
+                    }`}
                   >
                     <button
                       className="page-link"
@@ -184,65 +165,42 @@ const FindWork = () => {
         </div>
 
         {/* Đề xuất công việc */}
-        <div className="suggested-jobs">
-          <div className="d-flex justify-content-between align-items-center mb-3 p-3">
+        <div className="suggested-jobs mt-4">
+          <div className="d-flex justify-content-between align-items-center">
             <h2>Đề xuất công việc</h2>
             <button
               className="btn btn-info"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#collapseSuggestedJobs"
-              aria-expanded={isSuggestedCollapsed ? "true" : "false"}
-              aria-controls="collapseSuggestedJobs"
               onClick={() => {
-                setIsSuggestedCollapsed(!isSuggestedCollapsed); // Thay đổi trạng thái collapse
-                handleSuggestedJobsCollapse(); // Gọi API khi mở
+                setIsSuggestedCollapsed(!isSuggestedCollapsed);
+                handleSuggestedJobsCollapse();
               }}
             >
               {isSuggestedCollapsed ? (
-                <i className="bi bi-arrow-up-circle"></i> // Icon lên
+                <i className="bi bi-arrow-up-circle"></i>
               ) : (
-                <i className="bi bi-arrow-down-circle"></i> // Icon xuống
+                <i className="bi bi-arrow-down-circle"></i>
               )}
             </button>
           </div>
-
-          <div
-            id="collapseSuggestedJobs"
-            className={`collapse ${isSuggestedCollapsed ? "show" : ""}`} // Thêm class 'show' khi mở
-          >
-            <div className="row">
-              {suggestedJobs.length > 0 ? (
-                suggestedJobs.map((job) => (
-                  <div key={job.id} className="col-md-4 mb-4">
-                    <div className="card" style={{minHeight: '300px'}}>
-                      <a
-                        className="job-link text-decoration-none"
-                        href={job.jobUrl}
-                        rel="noopener"
-                        target="_blank"
-                      >
-                        <div className="card-body text-center">
-                          <div className="job-logo bg-light p-3 mb-3">
-                            <img
-                              src={job.companyLogo}
-                              alt="Company Logo"
-                              style={{ maxHeight: "80px", objectFit: "contain" }}
-                            />
-                          </div>
-                          <h5 className="card-title">{job.jobTitle}</h5>
-                          <p className="card-text">{job.companyName}</p>
-                          <div className="d-flex justify-content-between">
-                            <span>{job.workingLocations}</span>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
+          <div className={`collapse ${isSuggestedCollapsed ? "show" : ""}`}>
+            <div className="row mt-3">
+              {suggestedJobs.map((job) => (
+                <div key={job.id} className="col-md-4 mb-4">
+                  <div className="card">
+                    <a
+                      href={job.jobUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <img src={job.companyLogo} alt="Logo" />
+                      <div className="card-body">
+                        <h5 className="card-title">{job.jobTitle}</h5>
+                        <p className="card-text">{job.companyName}</p>
+                      </div>
+                    </a>
                   </div>
-                ))
-              ) : (
-                <p>Đang tải công việc đề xuất...</p> // Thông báo khi đang tải công việc
-              )}
+                </div>
+              ))}
             </div>
           </div>
         </div>

@@ -1,0 +1,30 @@
+.setting {
+  .card {
+    display: flex;
+    flex-direction: column; /* Sắp xếp theo cột */
+    justify-content: space-between; /* Đẩy nội dung ra hai đầu */
+    min-height: 240px; /* Đảm bảo chiều cao tối thiểu */
+    max-height: 240px;
+    border-radius: 8px;
+  }
+
+  .card .card-body {
+    flex-grow: 1; /* Đẩy nội dung chính chiếm hết không gian trống */
+    display: flex;
+    flex-direction: column; /* Sắp xếp nội dung chính theo cột */
+    justify-content: space-between; /* Đẩy các phần tử xuống hai đầu */
+  }
+
+  .card h5 {
+    margin-bottom: 10px;
+  }
+
+  .card p {
+    margin-bottom: auto; /* Đẩy nội dung văn bản lên phía trên */
+  }
+
+  .card button {
+    margin-top: 10px; /* Tạo khoảng cách giữa nội dung và nút */
+    align-self: stretch; /* Đảm bảo nút rộng 100% */
+  }
+}

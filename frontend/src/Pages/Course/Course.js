@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Slider from "react-slick"; // Import React Slick
 import "slick-carousel/slick/slick.css"; // Import css files
 import "slick-carousel/slick/slick-theme.css"; // Import css files
+import Loading from "../../components/Loading/Loading";
 
 import Header from "../../layouts/Header/Header";
 import SearchItem from "../../components/SearchItem/SearchItem";
@@ -112,11 +113,11 @@ const Course = () => {
     fetchCourses();
   }, []);
 
-  if (loading) return <div>Đang tải dữ liệu...</div>;
   if (error) return <div>Lỗi: {error}</div>;
 
   return (
     <div className="course">
+      {loading && <Loading />}
       <Header
         username="HuongPTA"
         title="Khóa học"

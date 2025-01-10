@@ -57,6 +57,14 @@
     font-weight: bold;
     margin-bottom: 10px;
   }
+  .course-content .sticky {
+    position: sticky;
+    top: 0; /* Khoảng cách từ đầu viewport */
+    z-index: 1; /* Để đảm bảo luôn ở trên các phần khác */
+    background-color: white; /* Đảm bảo nền không bị trong suốt khi cuộn */
+    padding: 10px; /* Thêm padding nếu cần */
+    border-bottom: 1px solid #ddd; /* Tạo ranh giới rõ ràng */
+  }
 
   .course-content .list-group-item {
     padding: 10px 15px;
@@ -66,8 +74,8 @@
   }
 
   .course-content .list-group-item.active {
-    background-color: #007bff;
-    color: #fff;
+    background-color: white;
+    color: #dc3546;
     font-weight: bold;
   }
 

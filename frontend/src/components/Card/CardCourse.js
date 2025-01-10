@@ -18,10 +18,10 @@ const CardCourse = ({ image, title, level, lessons, playlistId }) => {
       <div className="card-body">
         <h5 className="card-title fw-bold text-primary">{title}</h5>
         <p className="card-subtitle text-muted">{level}</p>
-        <p className="card-text text-secondary fw-semibold">{lessons} bài</p>
+        <p className="card-text text-secondary fw-semibold">{lessons} bài học</p>
         {/* Nút bấm */}
         <button
-          className="btn btn-white btn-sm rounded-pill mt-2"
+          className="btn btn-white btn-sm rounded-pill"
           onClick={handleViewDetail}
         >
           Xem chi tiết
