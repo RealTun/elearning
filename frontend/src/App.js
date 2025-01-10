@@ -1,6 +1,12 @@
 import "./App.css";
 import { useEffect } from "react";
-import { useNavigate, useLocation, BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  useNavigate,
+  useLocation,
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
 import { toast } from "react-toastify";
 import SideBar from "./layouts/SideBar/SideBar";
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -23,21 +29,23 @@ const App = () => {
   const noSideBarRoutes = ["/login", "/signup"];
   const hideSideBar = noSideBarRoutes.includes(location.pathname);
 
-  // Kiểm tra token
+  // Kiểm tra token khi ứng dụng khởi chạy hoặc khi người dùng điều hướng
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (isTokenExpired()) {
-      localStorage.clear(); // Xóa toàn bộ dữ liệu trong localStorage
+      localStorage.clear();
       toast.warning("Phiên làm việc đã hết hạn. Vui lòng đăng nhập lại!");
       navigate("/login"); // Chuyển hướng về trang đăng nhập
-    }
-    if (!token) {
-      localStorage.clear(); // Xóa toàn bộ dữ liệu trong localStorage
-      navigate("/login"); // Chuyển hướng về trang đăng nhập
+    } else if (token && location.pathname === "/login") {
+      navigate("/dashboard"); // Điều hướng vào Dashboard nếu đã đăng nhập
+    } else if (!token) {
+      localStorage.clear();
+      navigate("/login");
     }
   }, [location.pathname, navigate]);
 
+  // Hàm kiểm tra token hết hạn
   const isTokenExpired = () => {
     const expiredTime = localStorage.getItem("expiredTime");
     const now = new Date().getTime();
@@ -51,11 +59,14 @@ const App = () => {
 
       <div className="main">
         <Routes>
+          <Route
+            path="/"
+            element={localStorage.getItem("token") ? <Dashboard /> : <Login />}
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/course" element={<Course />} />
-          {/* <Route path="/course" element={<ShowCourse />} /> */}
           <Route path="/document" element={<Document />} />
           <Route path="/findwork" element={<FindWork />} />
           <Route path="/profile" element={<Profile />} />
@@ -63,7 +74,6 @@ const App = () => {
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/setting" element={<Setting />} />
           <Route path="/studyMaterials/:id" element={<ShowCourse />} />
-
         </Routes>
       </div>
     </div>

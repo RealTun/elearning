@@ -9,6 +9,9 @@ import CardSchedule from "../../components/Card/CardSchedule.js";
 const Dashboard = () => {
   const [date, setDate] = useState("Thứ 4,8/1/2024");
 
+  console.log(JSON.parse(localStorage.getItem("user"))); 
+  
+
   return (
     <div className="dashboard">
       {/* Phần header */}

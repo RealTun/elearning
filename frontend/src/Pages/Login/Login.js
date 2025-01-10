@@ -25,6 +25,7 @@ const Login = () => {
       if (response.status === 200) {
         toast.success("Đăng nhập thành công!", { autoClose: 2000 });
         const token = response.data.data; // Token từ API
+        // const expiredTime = new Date().getTime() + 60 * 1000; // Thời điểm hết hạn: 1 phút (ms)
         const expiredTime = new Date().getTime() + 3 * 60 * 60 * 1000; // Thời điểm hết hạn: 3 giờ (ms)
         // Lưu token và expiredTime vào localStorage
         localStorage.setItem("token", token);
