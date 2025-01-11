@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./Chatbot.css";
 import Header from "../../layouts/Header/Header";
 import API_URL from "../../config/API_URL.js";
@@ -10,23 +12,18 @@ const ChatApp = () => {
   const [isTyping, setIsTyping] = useState(false);
   const messageEndRef = useRef(null);
 
-  
-
   // Lấy lịch sử chat
   useEffect(() => {
-    const token = localStorage.getItem("token");
     const fetchChatHistory = async () => {
+      const token = localStorage.getItem("token");
       try {
         const response = await fetch(`${API_URL}/openai/chat/history`, {
-          headers: {
-            Authorization: token,
-          },
+          headers: { Authorization: token },
         });
         if (response.ok) {
           const data = await response.json();
           const conversations = data.data.conversations;
 
-          // Chuyển đổi `conversations` thành định dạng `messages`
           const formattedMessages = conversations.flatMap((conversation) => [
             {
               text: conversation.question,
@@ -40,123 +37,98 @@ const ChatApp = () => {
             },
           ]);
 
-          setMessages((prev) => [...prev, ...formattedMessages]); // Gộp lịch sử vào messages
+          setMessages((prev) => [...prev, ...formattedMessages]);
         } else {
-          console.error("Failed to fetch chat history:", response.statusText);
+          toast.error("Không thể tải lịch sử chat");
         }
       } catch (error) {
-        console.error("Error fetching chat history:", error);
+        toast.error("Lỗi khi tải lịch sử chat");
       }
     };
 
     fetchChatHistory();
   }, []);
 
-  // Cuộn xuống cuối khi có tin nhắn mới hoặc khi load lịch sử chat
+  // Cuộn xuống cuối cùng
   useEffect(() => {
-    scrollToBottom();
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Cuộn xuống cuối
-  const scrollToBottom = () => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   const checkMembership = async () => {
+    const token = localStorage.getItem("token");
     try {
-      const token = localStorage.getItem("token");
       const response = await fetch(`${API_URL}/user/checkMembershipStatus`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: token,
-        }
+        },
+      });
+      const data = await response.json();
+      return data.isPaidMember === true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  // Gửi tin nhắn
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+
+    if (!(await checkMembership())) {
+      toast.error("Vui lòng nâng cấp gói thành viên để sử dụng!");
+      return;
+    }
+
+    const userMessage = {
+      text: input,
+      sender: "You",
+      time: new Date().toLocaleTimeString(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
+    setIsTyping(true);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/openai/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({ message: input }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        if (data.isPaidMember === true) {
-          return true;
-        }
-      }
-
-      return false;
-    } catch (error) {
-      // console.error("Error checkMembership:", error);
-      return false;
-    }
-  }
-
-  // Gửi tin nhắn
-  const sendMessage = async () => {
-
-    const isPaidMember = await checkMembership();
-
-    if (!isPaidMember) {
-      toast.error("Vui lòng nâng cấp gói thành viên để sử dụng!", { autoClose: 2000 });
-      return;
-    }
-
-    if (input.trim()) {
-      const newMessage = {
-        text: input,
-        sender: "You",
-        time: new Date().toLocaleTimeString(),
-      };
-      setMessages([...messages, newMessage]);
-      setInput("");
-
-      setIsTyping(true); // Hiển thị trạng thái đang gõ
-
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`${API_URL}/openai/chat`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-          body: JSON.stringify({ message: input }),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-
-          // Thêm phản hồi của bot
-          const botReply = {
-            text: data.answer,
-            sender: "Bot",
-            time: new Date().toLocaleTimeString(),
-          };
-          setMessages((prev) => [...prev, botReply]);
-        } else {
-          console.error("Failed to fetch bot response:", response.statusText);
-          const errorReply = {
-            text: "Bot không thể trả lời ngay lúc này. Vui lòng thử lại sau.",
-            sender: "Bot",
-            time: new Date().toLocaleTimeString(),
-          };
-          setMessages((prev) => [...prev, errorReply]);
-        }
-      } catch (error) {
-        console.error("Error fetching bot response:", error);
-        const errorReply = {
-          text: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+        const botMessage = {
+          text: data.answer,
           sender: "Bot",
           time: new Date().toLocaleTimeString(),
         };
-        setMessages((prev) => [...prev, errorReply]);
-      } finally {
-        setIsTyping(false); // Ẩn trạng thái đang gõ
-        scrollToBottom(); // Cuộn xuống cuối
+        setMessages((prev) => [...prev, botMessage]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { text: "Bot không thể trả lời ngay lúc này. Vui lòng thử lại sau.", sender: "Bot", time: new Date().toLocaleTimeString() },
+        ]);
       }
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        { text: "Có lỗi xảy ra. Vui lòng thử lại sau.", sender: "Bot", time: new Date().toLocaleTimeString() },
+      ]);
+    } finally {
+      setIsTyping(false);
     }
   };
 
   return (
     <div>
       <Header username="HuongPTA" title="Chatbot" />
-      <ToastContainer></ToastContainer>
+      <ToastContainer />
       <div className="chat-container">
         <ChatMain
           messages={messages}
@@ -164,39 +136,25 @@ const ChatApp = () => {
           setInput={setInput}
           sendMessage={sendMessage}
           messageEndRef={messageEndRef}
-          isTyping={isTyping} // Truyền trạng thái isTyping
+          isTyping={isTyping}
         />
       </div>
     </div>
   );
 };
 
-const ChatMain = ({
-  messages,
-  input,
-  setInput,
-  sendMessage,
-  messageEndRef,
-  isTyping,
-}) => (
+const ChatMain = ({ messages, input, setInput, sendMessage, messageEndRef, isTyping }) => (
   <div className="chat-main">
     <div className="chat-messages">
       {messages.map((msg, index) => (
-        <div
-          key={index}
-          className={`chat-message mb-4 ${msg.sender === "You" ? "outgoing" : "incoming"
-            }`}
-        >
-          <div
-            className={`chat-bubble ${msg.sender === "You" ? "outgoing" : "incoming"
-              }`}
-          >
-            <p>{msg.text}</p>
+        <div key={index} className={`chat-message ${msg.sender === "You" ? "outgoing" : "incoming"}`}>
+          <div className={`chat-bubble ${msg.sender === "You" ? "outgoing" : "incoming"}`}>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
             <span className="chat-time">{msg.time}</span>
           </div>
         </div>
       ))}
-      {isTyping && ( // Hiển thị trạng thái "Bot đang trả lời..."
+      {isTyping && (
         <div className="chat-message incoming">
           <div className="chat-bubble incoming">
             <div className="typing-indicator">
@@ -207,14 +165,20 @@ const ChatMain = ({
           </div>
         </div>
       )}
-      <div ref={messageEndRef} /> {/* Auto-scroll target */}
+      <div ref={messageEndRef} />
     </div>
     <div className="chat-input">
-      <input
+      <textarea
         type="text"
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Nhập câu hỏi...."
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) { // Kiểm tra nếu chỉ nhấn Enter mà không nhấn Shift
+            e.preventDefault(); // Ngăn xuống dòng
+            sendMessage(); // Gọi hàm gửi tin nhắn
+          }
+        }}
+        placeholder="Nhập câu hỏi..."
       />
       <button onClick={sendMessage}>Gửi</button>
     </div>
