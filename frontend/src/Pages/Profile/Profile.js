@@ -1,267 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../../layouts/Header/Header";
+import axios from "axios";
+import API_URL from "../../config/API_URL.js";
 import "./Profile.css";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  console.log(user);
+  const [user, setUser] = useState(null); // Trạng thái lưu thông tin người dùng
+  const [loading, setLoading] = useState(true); // Trạng thái tải dữ liệu
 
-  //   {
-  //     "_id": "677e49ed0a5dfc4eaeb6f79c",
-  //     "username": "dunghq23",
-  //     "password": "$2b$10$6/xDyl02FPcs8ygToIVHkun.dBa0cibhNkNTDnB/Cd1Zr.cxfiIHy",
-  //     "role": "paid_user",
-  //     "study_schedule": [
-  //         {
-  //             "subjectName": "Hệ thống kinh doanh thông minh",
-  //             "subjectCode": "Hệ thống kinh doanh thông minh-1-24 (63HTTT1)",
-  //             "timetables": [
-  //                 {
-  //                     "weekIndex": 3,
-  //                     "startHour": "09:45",
-  //                     "endHour": "12:25"
-  //                 },
-  //                 {
-  //                     "weekIndex": 6,
-  //                     "startHour": "09:45",
-  //                     "endHour": "12:25"
-  //                 }
-  //             ],
-  //             "startDate": "11-11-2024",
-  //             "endDate": "05-01-2025"
-  //         },
-  //         {
-  //             "subjectName": "Chuyên đề hệ thống thông tin",
-  //             "subjectCode": "Chuyên đề hệ thống thông tin-1-24 (63HTTT1)",
-  //             "timetables": [
-  //                 {
-  //                     "weekIndex": 3,
-  //                     "startHour": "07:00",
-  //                     "endHour": "09:40"
-  //                 },
-  //                 {
-  //                     "weekIndex": 6,
-  //                     "startHour": "07:00",
-  //                     "endHour": "09:40"
-  //                 }
-  //             ],
-  //             "startDate": "11-11-2024",
-  //             "endDate": "05-01-2025"
-  //         },
-  //         {
-  //             "subjectName": "Đa phương tiện",
-  //             "subjectCode": "Đa phương tiện-1-24 (63HTTT1)",
-  //             "timetables": [
-  //                 {
-  //                     "weekIndex": 5,
-  //                     "startHour": "07:00",
-  //                     "endHour": "08:45"
-  //                 },
-  //                 {
-  //                     "weekIndex": 2,
-  //                     "startHour": "07:00",
-  //                     "endHour": "08:45"
-  //                 }
-  //             ],
-  //             "startDate": "11-11-2024",
-  //             "endDate": "05-01-2025"
-  //         },
-  //         {
-  //             "subjectName": "Đa phương tiện",
-  //             "subjectCode": "Đa phương tiện-7-24 (63HTTT1 ( TH1 ))",
-  //             "timetables": [
-  //                 {
-  //                     "weekIndex": 4,
-  //                     "startHour": "07:00",
-  //                     "endHour": "09:40"
-  //                 }
-  //             ],
-  //             "startDate": "25-11-2024",
-  //             "endDate": "05-01-2025"
-  //         }
-  //     ],
-  //     "list_mark": [
-  //         {
-  //             "subjectName": "An toàn và bảo mật thông tin",
-  //             "mark": 9,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Cấu trúc dữ liệu và giải thuật",
-  //             "mark": 9.2,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Cơ sở dữ liệu",
-  //             "mark": 9.8,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Công nghệ phần mềm",
-  //             "mark": 7.8,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Công nghệ Web",
-  //             "mark": 6.1,
-  //             "mark4": 2,
-  //             "charmark": "C"
-  //         },
-  //         {
-  //             "subjectName": "Hệ quản trị cơ sở dữ liệu",
-  //             "mark": 9.2,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Hệ thống thông tin địa lý",
-  //             "mark": 8.5,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Học máy",
-  //             "mark": 8.7,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Khai phá dữ liệu",
-  //             "mark": 7,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Kiến trúc máy tính",
-  //             "mark": 6.3,
-  //             "mark4": 2,
-  //             "charmark": "C"
-  //         },
-  //         {
-  //             "subjectName": "Lập trình nâng cao",
-  //             "mark": 8.4,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Lập trình Python",
-  //             "mark": 9.2,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Lập trình Windows",
-  //             "mark": 7.5,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Linux và phần mềm mã nguồn mở",
-  //             "mark": 7.9,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Mạng máy tính",
-  //             "mark": 9.3,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Nền tảng phát triển Web",
-  //             "mark": 9.3,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Nguyên lý hệ điều hành",
-  //             "mark": 7.7,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Nguyên lý lập trình hướng đối tượng",
-  //             "mark": 9.3,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Nhập môn điện toán đám mây",
-  //             "mark": 8.2,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Nhập môn lập trình",
-  //             "mark": 9.4,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Phân tích dữ liệu lớn",
-  //             "mark": 9.5,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Phân tích và thiết kế hệ thống thông tin",
-  //             "mark": 8.6,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Phát triển ứng dụng cho các thiết bị di động",
-  //             "mark": 8.8,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Quản lý dự án công nghệ thông tin",
-  //             "mark": 9,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         },
-  //         {
-  //             "subjectName": "Quản trị Hệ thống thông tin",
-  //             "mark": 8.3,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Toán rời rạc",
-  //             "mark": 7.8,
-  //             "mark4": 3,
-  //             "charmark": "B"
-  //         },
-  //         {
-  //             "subjectName": "Trí tuệ nhân tạo",
-  //             "mark": 8.5,
-  //             "mark4": 4,
-  //             "charmark": "A"
-  //         }
-  //     ],
-  //     "isSynced": true,
-  //     "created_at": "2025-01-08T09:48:29.332Z",
-  //     "updated_at": "2025-01-09T09:28:55.508Z",
-  //     "__v": 0,
-  //     "class": "63HTTT1",
-  //     "date_of_birth": "18/09/2003",
-  //     "department": "Khoa Công nghệ thông tin",
-  //     "email": "haquangdung18092003@gmail.com",
-  //     "full_name": "Hạ Quang Dũng",
-  //     "gender": "M",
-  //     "gpa": 3.42,
-  //     "major": "Hệ thống thông tin",
-  //     "uid": "2151160535"
-  // }
+  useEffect(() => {
+    const fetchUserDetail = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${API_URL}/user`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        });
+
+        if (response.status === 200) {
+          setUser(response.data.data); // Lưu thông tin người dùng vào state
+        }
+      } catch (err) {
+        console.error("Lỗi khi gọi API:", err);
+      } finally {
+        setLoading(false); // Dừng trạng thái tải
+      }
+    };
+
+    fetchUserDetail(); // Gọi hàm khi component được tải
+  }, []);
+
+  if (loading) {
+    return <div>Đang tải...</div>; // Hiển thị trạng thái đang tải
+  }
+
+  if (!user) {
+    return <div>Không thể tải thông tin người dùng. Vui lòng thử lại!</div>; // Thông báo lỗi nếu không có dữ liệu
+  }
+
   return (
     <div className="profile">
       {/* Header Component */}
-      <Header userName="HuongPTA" title="Thông tin cá nhân"></Header>
+      <Header userName={user.full_name} title="Thông tin cá nhân"></Header>
 
       {/* Thông tin chính */}
       <div className="profile-header card shadow-sm">
@@ -306,13 +88,14 @@ const Profile = () => {
                     </p>
                     <p>
                       <strong>Giới tính:</strong>{" "}
-                      {user.gender === "M" ? "Nam" : "Nữ"}
+                      {user.gender === "M" ? "Nam" : user.gender === "F" ? "Nữ" : "Chưa xác định"}
                     </p>
                     <p>
                       <strong>Ngày sinh:</strong> {user.date_of_birth}
                     </p>
                     <p>
-                      <strong>Hạng thành viên:</strong> {user.role === "paid_user" ? "Thành viên VIP" : "Thành viên miễn phí"}
+                      <strong>Hạng thành viên:</strong>{" "}
+                      {user.role === "paid_user" ? "Thành viên VIP" : "Thành viên miễn phí"}
                     </p>
                   </div>
                 </div>

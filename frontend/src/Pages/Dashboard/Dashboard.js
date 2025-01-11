@@ -143,7 +143,7 @@ const Dashboard = () => {
                     ></i>
                   }
                   title="Chứng chỉ đạt được"
-                  value={3} // Thay giá trị thực nếu có
+                  value={courseProgress.length} // Thay giá trị thực nếu có
                   bgColor="bg-orange"
                 />
               </div>
