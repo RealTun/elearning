@@ -84,13 +84,14 @@
   border-top: 1px solid #ddd;
 }
 
-.chat-input input {
+.chat-input textarea {
   flex-grow: 1;
   padding: 10px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
+  resize: none;
 }
 
 .chat-input input:focus {
